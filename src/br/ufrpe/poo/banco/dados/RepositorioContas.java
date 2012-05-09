@@ -4,7 +4,7 @@ import br.ufrpe.poo.banco.iterator.IteratorContaAbstrata;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 
 public interface RepositorioContas {
-	  void inserir(ContaAbstrata conta1) throws RepositorioException;
+	  void inserir(ContaAbstrata conta) throws RepositorioException;
 	  ContaAbstrata procurar(String numero) throws RepositorioException, ContaNaoEncontradaException;
 	  void remover(String numero) throws RepositorioException, ContaNaoEncontradaException;
 	  void atualizar(ContaAbstrata conta) throws RepositorioException, ContaNaoEncontradaException;
