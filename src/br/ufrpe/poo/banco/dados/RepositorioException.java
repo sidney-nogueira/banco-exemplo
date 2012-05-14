@@ -4,12 +4,12 @@ public class RepositorioException extends Exception {
 	
 	private Throwable exception;
 	
-	public RepositorioException(Throwable exception) {
-		this.exception = exception;
-	}
-	
-	public String getMessage() {
-		return exception.getMessage();
+	public RepositorioException(String mensagem) {
+		super(mensagem);
 	}
 
+	public RepositorioException(Throwable exception) {
+		super(exception);
+	}
+	
 }

@@ -4,18 +4,36 @@ import br.ufrpe.poo.banco.iterator.IteratorContaAbstrata;
 import br.ufrpe.poo.banco.iterator.IteratorContaAbstrataArray;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 
+/**
+ * Implementacao de repositorio que mantem as contas na memoria em um array.
+ * @author sidneynogueira
+ *
+ */
 public class RepositorioContasArray implements RepositorioContas {
 
+	/** Array que mantem as contas. Array utilizado de forma contigua. */
 	private ContaAbstrata[] contas;
+	
+	/** Proxima proxima posicao livre no array. */
 	private int indice;
 
+	/**
+	 * Constroi um repositorio utilizando array.
+	 *  
+	 * Tamanho padrao do array sao 100 posicoes.
+	 */
 	public RepositorioContasArray() {
 		contas = new ContaAbstrata[100];
 		indice = 0;
 	}
 
-	public void inserir(ContaAbstrata conta) {
-		if(contas.length == indice) {
+	@Override
+	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
+		if(this.existe(conta.getNumero())) {
+			return false;
+		} 
+		//se array chegou na capacidade
+		if(contas.length == indice) {  
 			ContaAbstrata[] aux = new ContaAbstrata[contas.length*2];
 			for (int i=0; i<indice; i++) {
 				aux[i] = contas[i];
@@ -24,44 +42,15 @@ public class RepositorioContasArray implements RepositorioContas {
 		}
 		contas[indice] = conta;
 		indice = indice + 1;
+		return true;
 	}
-
-	public ContaAbstrata procurar(String numero) throws ContaNaoEncontradaException {
-		ContaAbstrata resposta = null;
-		int i = this.getIndice(numero);
-		if (i == this.indice) {
-			throw new ContaNaoEncontradaException();
-		} else {
-			resposta = this.contas[i];
-		}
-		return resposta;
-	}
-
-	public void remover(String numero) throws ContaNaoEncontradaException {
-		int i = this.getIndice(numero);
-		if (i == this.indice) {
-			throw new ContaNaoEncontradaException();
-		} else {
-			this.indice = this.indice - 1;
-			this.contas[i] = this.contas[this.indice];
-			this.contas[this.indice] = null;
-		}
-	}
-
-	public void atualizar(ContaAbstrata conta) throws ContaNaoEncontradaException {
-		int i = this.getIndice(conta.getNumero());
-		if (i == this.indice) {
-			throw new ContaNaoEncontradaException();
-		} else {
-			this.contas[i] = conta;
-		}
-	}
-
-	public boolean existe(String numero) {
-		int i = this.getIndice(numero);
-		return (i != this.indice);
-	}
-
+	
+	/**
+	 * Retorna o indice da conta no array.
+	 * 
+	 * @param numero numero da conta cujo indice e retornado.
+	 * @return indice da conta no array. Igual a this.indice caso a conta nao exista.
+	 */
 	private int getIndice(String numero) {
 		String n;
 		boolean achou = false;
@@ -75,6 +64,43 @@ public class RepositorioContasArray implements RepositorioContas {
 			}
 		}
 		return i;
+	}
+
+	@Override
+	public ContaAbstrata procurar(String numero) throws RepositorioException {
+		ContaAbstrata resposta = null;
+		int i = this.getIndice(numero);
+		if (i < this.indice) {
+			resposta = this.contas[i];
+		} 
+		return resposta;
+	}
+
+	@Override
+	public boolean remover(String numero) throws RepositorioException {
+		boolean sucesso = false;
+		int i = this.getIndice(numero);
+		if (i < this.indice) {
+			this.indice = this.indice - 1;
+			this.contas[i] = this.contas[this.indice];
+			this.contas[this.indice] = null;
+		}
+		return sucesso;
+	}
+
+	@Override
+	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
+	    boolean sucesso = false;
+		int i = this.getIndice(conta.getNumero());
+		if (i < this.indice) {
+			this.contas[i] = conta;
+		}
+		return sucesso;
+	}
+
+	public boolean existe(String numero) throws RepositorioException {
+		int i = this.getIndice(numero);
+		return (i != this.indice);
 	}
 
 	public IteratorContaAbstrata getIterator() {
