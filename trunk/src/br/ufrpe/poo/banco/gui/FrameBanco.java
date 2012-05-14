@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import br.ufrpe.poo.banco.dados.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 import br.ufrpe.poo.banco.negocio.Banco;
@@ -20,6 +19,7 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 import br.ufrpe.poo.banco.negocio.ContaEspecial;
 import br.ufrpe.poo.banco.negocio.ContaImposto;
 import br.ufrpe.poo.banco.negocio.ContaJaCadastradaException;
+import br.ufrpe.poo.banco.negocio.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.negocio.Poupanca;
 import br.ufrpe.poo.banco.negocio.RenderBonusContaEspecialException;
 import br.ufrpe.poo.banco.negocio.RenderJurosPoupancaException;
