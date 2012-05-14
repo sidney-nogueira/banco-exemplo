@@ -6,6 +6,7 @@ public class Conta extends ContaAbstrata {
 		super(numero, valor);
 	}
 
+	@Override
 	public void debitar(double valor) throws SaldoInsuficienteException {
 		if (this.getSaldo() < valor)
 			throw new SaldoInsuficienteException(this.getNumero(), this.getSaldo());

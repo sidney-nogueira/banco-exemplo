@@ -1,6 +1,5 @@
 package br.ufrpe.poo.banco.negocio;
 
-import br.ufrpe.poo.banco.dados.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.dados.RepositorioContas;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 
@@ -8,7 +7,7 @@ public class Banco {
 
 	private RepositorioContas contas;
 	
-	private final double TAXA = 0.008;
+	private final double TAXA_RENDIMENTO_POUPANCA = 0.008;
 
 	public Banco(RepositorioContas rep) {
 		this.contas = rep;
@@ -52,7 +51,7 @@ public class Banco {
 	public void renderJuros(String numero) throws RepositorioException, ContaNaoEncontradaException, RenderJurosPoupancaException{
 		ContaAbstrata c = contas.procurar(numero);
 		if (c instanceof Poupanca) {
-			((Poupanca) c).renderJuros(TAXA);
+			((Poupanca) c).renderJuros(TAXA_RENDIMENTO_POUPANCA);
 			contas.atualizar(c);
 		} 
 		else {

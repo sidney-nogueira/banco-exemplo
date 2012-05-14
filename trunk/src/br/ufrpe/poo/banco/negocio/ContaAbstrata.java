@@ -3,6 +3,7 @@ package br.ufrpe.poo.banco.negocio;
 import java.io.Serializable;
 
 public abstract class ContaAbstrata implements Serializable {
+
 	private String numero;
 	private double saldo;
 	
