@@ -1,6 +1,5 @@
 package br.ufrpe.poo.banco.dados;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -15,36 +14,51 @@ import br.ufrpe.poo.banco.negocio.ContaImposto;
 import br.ufrpe.poo.banco.negocio.Poupanca;
 
 /**
- * Implementacao de repositorio de contas que persiste contas em arquivo.
+ * Implementacao de repositorio de contas que persiste contas em arquivo texto.
+ * 
+ * Cada linha do arquivo representa uma conta e segue o padrao:
+ * <p>
+ * numero, saldo, tipoConta, bonus
+ * <p>
+ * tipoConta e um valor inteiro para o tipo da conta: 0 - Conta, 1 - Poupanca, 2
+ * - ContaImposto e 3 - ContaEspecial
  */
 public class RepositorioContasArquivoTxt implements RepositorioContas {
 
-	/** Contas do arquivo sao guardadas em memoria num repositorio de contas. */
+	/** Contas do arquivo sao mantidas em memoria. */
 	private RepositorioContasArray contas;
 
-	/** Caminho para arquivo que guarda as informacoes das contas. */
-	private final String ARQUIVO = "contas.txt";
-
 	/** Arquivo que armazena as contas. */
-	private File arquivoContas;
+	private File arquivo;
 
 	/**
-	 * Constroi um repositorio a partir de contas armazenadas em arquivo texto.
+	 * Constroi um repositorio que mantem contas em arquivo texto.
 	 * 
+	 * @param arquivo
+	 *            arquivo texto com informacoes sobre as contas. Se arquivo nao
+	 *            existe, sera criado um vazio.
 	 * @throws RepositorioException
+	 *             lancada caso o arquivo nao possa ser criado.
 	 */
-	public RepositorioContasArquivoTxt() throws RepositorioException {
+	public RepositorioContasArquivoTxt(File arquivo)
+			throws RepositorioException {
 		contas = new RepositorioContasArray();
-		arquivoContas = new File(ARQUIVO);
-		if (!arquivoContas.exists()) {
-			throw new RepositorioException("Arquivo de contas \""
-					+ this.ARQUIVO + "\" nao foi encontrado!");
+		this.arquivo = arquivo;
+		if (!arquivo.exists()) {
+			try {
+				arquivo.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RepositorioException("Arquivo de contas \""
+						+ this.arquivo.getAbsolutePath()
+						+ this.arquivo.getName() + "\" nao pode ser criado!");
+			}
 		}
 		this.lerArquivo();
 	}
 
 	/**
-	 * Le as contas a partir do arquivo.
+	 * Le todas as contas do arquivo e guarda no repositorio de array.
 	 * 
 	 * @throws RepositorioException
 	 *             lancada em caso de erro na leitura do arquivo.
@@ -52,31 +66,25 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 	private void lerArquivo() throws RepositorioException {
 		Scanner inBanco = null;
 		ContaAbstrata conta = null;
-		int tipoConta;
-		String numero;
-		double saldo;
-		double bonus;
 		try {
-			inBanco = new Scanner(arquivoContas);
+			inBanco = new Scanner(arquivo);
 			while (inBanco.hasNext()) {
-				tipoConta = inBanco.nextInt();
-				numero = inBanco.next();
-				saldo = Double.parseDouble(inBanco.next());
+				int tipoConta = inBanco.nextInt();
+				String numero = inBanco.next();
+				double saldo = Double.parseDouble(inBanco.next());
 				switch (tipoConta) {
 				case 0:
-					conta = new Conta(numero, saldo); // eh uma Conta
+					conta = new Conta(numero, saldo);
 					break;
 				case 1:
-					conta = new Poupanca(numero, saldo); // eh uma Poupanca
+					conta = new Poupanca(numero, saldo);
 					break;
 				case 2:
-					conta = new ContaImposto(numero, saldo); // eh uma
-																// ContaImposto
+					conta = new ContaImposto(numero, saldo);
 					break;
 				case 3:
-					bonus = Double.parseDouble(inBanco.next());
-					conta = new ContaEspecial(numero, saldo, bonus); // eh uma
-																		// ContaEspecial
+					double bonus = Double.parseDouble(inBanco.next());
+					conta = new ContaEspecial(numero, saldo, bonus);
 					break;
 				default:
 					throw new RepositorioException(new Exception(
@@ -103,8 +111,7 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 			throws RepositorioException {
 		FileWriter fw = null;
 		try {
-			fw = new FileWriter(arquivoContas, true);
-			System.out.println(conta);
+			fw = new FileWriter(arquivo, true);
 			if (conta instanceof Poupanca) {
 				fw.write("1 " + conta.getNumero() + " " + conta.getSaldo());
 			} else if (conta instanceof ContaImposto) {
@@ -136,35 +143,31 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 	 *             levantada no caso de um erro com o arquivo.
 	 */
 	private void gravarArquivo() throws RepositorioException {
-		BufferedWriter bw = null;
 		FileWriter fw = null;
 		try {
-			fw = new FileWriter(arquivoContas);
-			bw = new BufferedWriter(fw);
+			fw = new FileWriter(arquivo);
 			IteratorContaAbstrata it = contas.getIterator();
 			while (it.hasNext()) {
 				ContaAbstrata c = it.next();
-				System.out.println(c);
-				if (c instanceof Poupanca) {
-					bw.write("1 " + c.getNumero() + " " + c.getSaldo());
+				if (c instanceof Conta) {
+					fw.write("0 " + c.getNumero() + " " + c.getSaldo());
+				} else if (c instanceof Poupanca) {
+					fw.write("1 " + c.getNumero() + " " + c.getSaldo());
 				} else if (c instanceof ContaImposto) {
-					bw.write("2 " + c.getNumero() + " " + c.getSaldo());
+					fw.write("2 " + c.getNumero() + " " + c.getSaldo());
 				} else if (c instanceof ContaEspecial) {
-					bw.write("3 " + c.getNumero() + " " + c.getSaldo() + " "
+					fw.write("3 " + c.getNumero() + " " + c.getSaldo() + " "
 							+ ((ContaEspecial) c).getBonus());
-				} else if (c instanceof Conta) {
-					bw.write("0 " + c.getNumero() + " " + c.getSaldo());
 				} else {
 					throw new RepositorioException(new Exception(
-							"Erro interno!"));
+							"Tipo de conta nao suportado!"));
 				}
-				bw.newLine();
+				fw.write("\n");
 			}
 		} catch (IOException e) {
 			throw new RepositorioException(e);
 		} finally {
 			try {
-				bw.close();
 				fw.close();
 			} catch (IOException e) {
 				throw new RepositorioException(e);

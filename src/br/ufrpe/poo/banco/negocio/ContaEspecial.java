@@ -3,11 +3,7 @@ package br.ufrpe.poo.banco.negocio;
 public class ContaEspecial extends Conta {
 	
 	private double bonus;
-
-	public ContaEspecial(String numero, double valor) {
-		this(numero, valor, 0.0);
-	}
-
+	
 	public ContaEspecial(String numero, double saldo, double bonus) {
 		super(numero, saldo);
 		this.bonus = bonus;
