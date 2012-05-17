@@ -187,7 +187,7 @@ public class FrameBanco extends JFrame {
 				} else if(rb_poupanca.isSelected()) {
 					conta = new Poupanca(numero, valor);
 				} else if(rb_contaEspecial.isSelected()) {
-					conta = new ContaEspecial(numero, valor);
+					conta = new ContaEspecial(numero, valor, 0);
 				} else if(rb_contaImposto.isSelected()) {
 					conta = new ContaImposto(numero, valor);
 				}

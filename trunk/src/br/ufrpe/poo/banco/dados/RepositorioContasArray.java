@@ -6,21 +6,21 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 
 /**
  * Implementacao de repositorio que mantem as contas na memoria em um array.
- * @author sidneynogueira
- *
+ * 
+ * Tamanho do array cresce sob demanda.
  */
 public class RepositorioContasArray implements RepositorioContas {
 
-	/** Array que mantem as contas. Array utilizado de forma contigua. */
+	/** Array que mantem as contas. */
 	private ContaAbstrata[] contas;
-	
-	/** Proxima proxima posicao livre no array. */
+
+	/** Proxima posicao livre no array. */
 	private int indice;
 
 	/**
-	 * Constroi um repositorio utilizando array.
-	 *  
-	 * Tamanho padrao do array sao 100 posicoes.
+	 * Constroi um repositorio com array.
+	 * 
+	 * Tamanho inicial do array sao 100 posicoes.
 	 */
 	public RepositorioContasArray() {
 		contas = new ContaAbstrata[100];
@@ -29,13 +29,13 @@ public class RepositorioContasArray implements RepositorioContas {
 
 	@Override
 	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
-		if(this.existe(conta.getNumero())) {
+		if (this.existe(conta.getNumero())) {
 			return false;
-		} 
-		//se array chegou na capacidade
-		if(contas.length == indice) {  
-			ContaAbstrata[] aux = new ContaAbstrata[contas.length*2];
-			for (int i=0; i<indice; i++) {
+		}
+		// se array chegou na capacidade
+		if (contas.length == indice) {
+			ContaAbstrata[] aux = new ContaAbstrata[contas.length * 2];
+			for (int i = 0; i < indice; i++) {
 				aux[i] = contas[i];
 			}
 			this.contas = aux;
@@ -44,12 +44,14 @@ public class RepositorioContasArray implements RepositorioContas {
 		indice = indice + 1;
 		return true;
 	}
-	
+
 	/**
 	 * Retorna o indice da conta no array.
 	 * 
-	 * @param numero numero da conta cujo indice e retornado.
-	 * @return indice da conta no array. Igual a this.indice caso a conta nao exista.
+	 * @param numero
+	 *            numero da conta cujo indice e retornado.
+	 * @return indice da conta no array. Igual a this.indice caso a conta nao
+	 *         exista.
 	 */
 	private int getIndice(String numero) {
 		String n;
@@ -72,7 +74,7 @@ public class RepositorioContasArray implements RepositorioContas {
 		int i = this.getIndice(numero);
 		if (i < this.indice) {
 			resposta = this.contas[i];
-		} 
+		}
 		return resposta;
 	}
 
@@ -80,9 +82,12 @@ public class RepositorioContasArray implements RepositorioContas {
 	public boolean remover(String numero) throws RepositorioException {
 		boolean sucesso = false;
 		int i = this.getIndice(numero);
-		if (i < this.indice) {
-			this.indice = this.indice - 1;
+		if (i < this.indice) {//valida indice
+			// decrementa proximo indice livre
+			this.indice = this.indice - 1; 
+			// copia ultimo para removido
 			this.contas[i] = this.contas[this.indice];
+			// ultimo aponta para null
 			this.contas[this.indice] = null;
 		}
 		return sucesso;
@@ -90,7 +95,7 @@ public class RepositorioContasArray implements RepositorioContas {
 
 	@Override
 	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
-	    boolean sucesso = false;
+		boolean sucesso = false;
 		int i = this.getIndice(conta.getNumero());
 		if (i < this.indice) {
 			this.contas[i] = conta;
@@ -98,11 +103,13 @@ public class RepositorioContasArray implements RepositorioContas {
 		return sucesso;
 	}
 
+	@Override
 	public boolean existe(String numero) throws RepositorioException {
 		int i = this.getIndice(numero);
 		return (i != this.indice);
 	}
 
+	@Override
 	public IteratorContaAbstrata getIterator() {
 		return new IteratorContaAbstrataArray(this.contas);
 	}
