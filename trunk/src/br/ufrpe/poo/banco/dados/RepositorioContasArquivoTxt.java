@@ -18,7 +18,7 @@ import br.ufrpe.poo.banco.negocio.Poupanca;
  * 
  * Cada linha do arquivo representa uma conta e segue o padrao:
  * <p>
- * numero, saldo, tipoConta, bonus
+ * tipoConta numero saldo bonus
  * <p>
  * tipoConta e um valor inteiro para o tipo da conta: 0 - Conta, 1 - Poupanca, 2
  * - ContaImposto e 3 - ContaEspecial
@@ -38,7 +38,7 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 	 *            arquivo texto com informacoes sobre as contas. Se arquivo nao
 	 *            existe, sera criado um vazio.
 	 * @throws RepositorioException
-	 *             lancada caso o arquivo nao possa ser criado.
+	 *             lancada caso o arquivo nao existe e nao pode ser criado.
 	 */
 	public RepositorioContasArquivoTxt(File arquivo)
 			throws RepositorioException {
@@ -64,14 +64,14 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 	 *             lancada em caso de erro na leitura do arquivo.
 	 */
 	private void lerArquivo() throws RepositorioException {
-		Scanner inBanco = null;
+		Scanner s = null;
 		ContaAbstrata conta = null;
 		try {
-			inBanco = new Scanner(arquivo);
-			while (inBanco.hasNext()) {
-				int tipoConta = inBanco.nextInt();
-				String numero = inBanco.next();
-				double saldo = Double.parseDouble(inBanco.next());
+			s = new Scanner(arquivo);
+			while (s.hasNext()) {
+				int tipoConta = s.nextInt();
+				String numero = s.next();
+				double saldo = Double.parseDouble(s.next());
 				switch (tipoConta) {
 				case 0:
 					conta = new Conta(numero, saldo);
@@ -83,19 +83,19 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 					conta = new ContaImposto(numero, saldo);
 					break;
 				case 3:
-					double bonus = Double.parseDouble(inBanco.next());
+					double bonus = Double.parseDouble(s.next());
 					conta = new ContaEspecial(numero, saldo, bonus);
 					break;
 				default:
-					throw new RepositorioException(new Exception(
-							"Tipo de conta inexistente!"));
+					throw new RepositorioException(
+							"Tipo de conta inexistente!");
 				}
 				this.contas.inserir(conta);
 			}
 		} catch (FileNotFoundException e) {
 			throw new RepositorioException(e);
 		} finally {
-			inBanco.close();
+			s.close();
 		}
 	}
 
