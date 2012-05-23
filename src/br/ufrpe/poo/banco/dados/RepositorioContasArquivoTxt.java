@@ -192,14 +192,18 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 	@Override
 	public boolean remover(String numero) throws RepositorioException {
 		boolean sucesso = contas.remover(numero);
-		this.gravarArquivo();
+		if(sucesso){
+			this.gravarArquivo();			
+		}
 		return sucesso;
 	}
 
 	@Override
 	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.atualizar(conta);
-		this.gravarArquivo();
+		if(sucesso){
+			this.gravarArquivo();			
+		}
 		return sucesso;
 	}
 
