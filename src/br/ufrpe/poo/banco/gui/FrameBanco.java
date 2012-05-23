@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 import br.ufrpe.poo.banco.negocio.Banco;
 import br.ufrpe.poo.banco.negocio.Conta;
@@ -27,7 +26,7 @@ import br.ufrpe.poo.banco.negocio.SaldoInsuficienteException;
 
 public class FrameBanco extends JFrame {
 
-	private Banco fachada;
+//	private Banco fachada;
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -59,12 +58,12 @@ public class FrameBanco extends JFrame {
 	 */
 	public FrameBanco() {
 		super();
-		try {
+//		try {
 			initialize();
 			
 			//fachada = new Banco(new RepositorioContasArray());
 			//fachada = new Banco(new RepositorioContasArquivoTxt());
-			fachada = new Banco(new RepositorioContasArquivoBin());
+//			fachada = new Banco(new RepositorioContasArquivoBin());
 			
 			
 			//Veja como usar RadioButton em 
@@ -74,9 +73,9 @@ public class FrameBanco extends JFrame {
 			bg.add(rb_contaEspecial);
 			bg.add(rb_contaImposto);
 			bg.add(rb_poupanca);
-		} catch (RepositorioException e) {
-			erroRepositorio(e.getMessage());
-		}
+//		} catch (RepositorioException e) {
+//			erroRepositorio(e.getMessage());
+//		}
 		
 	}
 
@@ -191,7 +190,7 @@ public class FrameBanco extends JFrame {
 				} else if(rb_contaImposto.isSelected()) {
 					conta = new ContaImposto(numero, valor);
 				}
-				fachada.cadastrar(conta);
+				Banco.getInstance().cadastrar(conta);
 				sucesso(conta.getClass().getSimpleName()+" cadastrada com sucesso");
 			} catch (NumberFormatException e) {
 				erroConversao();
@@ -231,7 +230,7 @@ public class FrameBanco extends JFrame {
 		} else {
 			try {
 				double valor = Double.parseDouble(v);	
-				fachada.creditar(numero, valor);
+				Banco.getInstance().creditar(numero, valor);
 				sucesso("Credito executado com sucesso");
 			} catch (NumberFormatException e) {
 				erroConversao();
@@ -270,7 +269,7 @@ public class FrameBanco extends JFrame {
 		} else {
 			try {
 				double valor = Double.parseDouble(v);	
-				fachada.debitar(numero, valor);
+				Banco.getInstance().debitar(numero, valor);
 				sucesso("Debito executado com sucesso");
 			} catch (NumberFormatException e) {
 				erroConversao();
@@ -314,9 +313,11 @@ public class FrameBanco extends JFrame {
 				double valor = Double.parseDouble(v);
 				do {
 					para = JOptionPane.showInputDialog(this, "Informe o numero da conta de destino");
-				} while (para.equals(""));
-				fachada.transferir(de, para, valor);
-				sucesso("Transferencia executada com sucesso");
+				} while (para != null && para.equals(""));
+				if (para != null) {
+					Banco.getInstance().transferir(de, para, valor);
+					sucesso("Transferencia executada com sucesso");
+				}
 			} catch (NumberFormatException e) {
 				erroConversao();
 			} catch (ContaNaoEncontradaException e) {
@@ -354,7 +355,7 @@ public class FrameBanco extends JFrame {
 			erroNumero();
 		} else {
 			try {
-				double saldo = fachada.getSaldo(numero);
+				double saldo = Banco.getInstance().getSaldo(numero);
 				sucesso("O saldo da conta "+ numero+" eh "+saldo);
 			} catch (ContaNaoEncontradaException e) {
 				erroNumero(e.getMessage());
@@ -389,7 +390,7 @@ public class FrameBanco extends JFrame {
 			erroNumero();
 		} else {
 			try {
-				fachada.renderJuros(numero);
+				Banco.getInstance().renderJuros(numero);
 				sucesso("Juros creditado com sucesso");
 			} catch (ContaNaoEncontradaException e) {
 				erroNumero(e.getMessage());
@@ -426,7 +427,7 @@ public class FrameBanco extends JFrame {
 			erroNumero();
 		} else {
 			try {
-				fachada.renderBonus(numero);
+				Banco.getInstance().renderBonus(numero);
 				sucesso("Bonus creditado com sucesso");
 			} catch (ContaNaoEncontradaException e) {
 				erroNumero(e.getMessage());
