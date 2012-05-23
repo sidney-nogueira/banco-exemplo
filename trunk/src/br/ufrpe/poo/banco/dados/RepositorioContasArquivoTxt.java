@@ -178,7 +178,9 @@ public class RepositorioContasArquivoTxt implements RepositorioContas {
 	@Override
 	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.inserir(conta);
-		this.concatenarEmArquivo(conta);
+		if(sucesso){
+			this.concatenarEmArquivo(conta);			
+		}
 		return sucesso;
 	}
 
