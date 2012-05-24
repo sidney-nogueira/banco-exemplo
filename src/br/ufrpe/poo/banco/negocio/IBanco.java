@@ -2,6 +2,9 @@ package br.ufrpe.poo.banco.negocio;
 
 import br.ufrpe.poo.banco.dados.RepositorioException;
 
+/**
+ * Interface para a fachada do sistema do banco.
+ */
 public interface IBanco {
 
 	/**
