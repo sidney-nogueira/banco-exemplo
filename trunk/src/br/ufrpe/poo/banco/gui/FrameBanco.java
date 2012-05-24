@@ -19,6 +19,8 @@ import br.ufrpe.poo.banco.negocio.ContaEspecial;
 import br.ufrpe.poo.banco.negocio.ContaImposto;
 import br.ufrpe.poo.banco.negocio.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.negocio.ContaNaoEncontradaException;
+import br.ufrpe.poo.banco.negocio.IBanco;
+import br.ufrpe.poo.banco.negocio.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.negocio.Poupanca;
 import br.ufrpe.poo.banco.negocio.RenderBonusContaEspecialException;
 import br.ufrpe.poo.banco.negocio.RenderJurosPoupancaException;
@@ -26,7 +28,7 @@ import br.ufrpe.poo.banco.negocio.SaldoInsuficienteException;
 
 public class FrameBanco extends JFrame {
 
-//	private Banco fachada;
+	private IBanco fachadaBanco;
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -58,13 +60,14 @@ public class FrameBanco extends JFrame {
 	 */
 	public FrameBanco() {
 		super();
-//		try {
 			initialize();
 			
-			//fachada = new Banco(new RepositorioContasArray());
-			//fachada = new Banco(new RepositorioContasArquivoTxt());
-//			fachada = new Banco(new RepositorioContasArquivoBin());
-			
+			try {
+				fachadaBanco = Banco.getInstance();
+			} catch (InicializacaoSistemaException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 			
 			//Veja como usar RadioButton em 
 			//http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/JRadioButton.html
@@ -72,11 +75,7 @@ public class FrameBanco extends JFrame {
 			bg.add(rb_conta);
 			bg.add(rb_contaEspecial);
 			bg.add(rb_contaImposto);
-			bg.add(rb_poupanca);
-//		} catch (RepositorioException e) {
-//			erroRepositorio(e.getMessage());
-//		}
-		
+			bg.add(rb_poupanca);		
 	}
 
 	private void erroConversao() {
@@ -190,7 +189,7 @@ public class FrameBanco extends JFrame {
 				} else if(rb_contaImposto.isSelected()) {
 					conta = new ContaImposto(numero, valor);
 				}
-				Banco.getInstance().cadastrar(conta);
+				fachadaBanco.cadastrar(conta);
 				sucesso(conta.getClass().getSimpleName()+" cadastrada com sucesso");
 			} catch (NumberFormatException e) {
 				erroConversao();
@@ -230,7 +229,7 @@ public class FrameBanco extends JFrame {
 		} else {
 			try {
 				double valor = Double.parseDouble(v);	
-				Banco.getInstance().creditar(numero, valor);
+				fachadaBanco.creditar(numero, valor);
 				sucesso("Credito executado com sucesso");
 			} catch (NumberFormatException e) {
 				erroConversao();
@@ -269,7 +268,7 @@ public class FrameBanco extends JFrame {
 		} else {
 			try {
 				double valor = Double.parseDouble(v);	
-				Banco.getInstance().debitar(numero, valor);
+				fachadaBanco.debitar(numero, valor);
 				sucesso("Debito executado com sucesso");
 			} catch (NumberFormatException e) {
 				erroConversao();
@@ -315,7 +314,7 @@ public class FrameBanco extends JFrame {
 					para = JOptionPane.showInputDialog(this, "Informe o numero da conta de destino");
 				} while (para != null && para.equals(""));
 				if (para != null) {
-					Banco.getInstance().transferir(de, para, valor);
+					fachadaBanco.transferir(de, para, valor);
 					sucesso("Transferencia executada com sucesso");
 				}
 			} catch (NumberFormatException e) {
@@ -355,7 +354,7 @@ public class FrameBanco extends JFrame {
 			erroNumero();
 		} else {
 			try {
-				double saldo = Banco.getInstance().getSaldo(numero);
+				double saldo = fachadaBanco.getSaldo(numero);
 				sucesso("O saldo da conta "+ numero+" eh "+saldo);
 			} catch (ContaNaoEncontradaException e) {
 				erroNumero(e.getMessage());
@@ -390,7 +389,7 @@ public class FrameBanco extends JFrame {
 			erroNumero();
 		} else {
 			try {
-				Banco.getInstance().renderJuros(numero);
+				fachadaBanco.renderJuros(numero);
 				sucesso("Juros creditado com sucesso");
 			} catch (ContaNaoEncontradaException e) {
 				erroNumero(e.getMessage());
@@ -427,7 +426,7 @@ public class FrameBanco extends JFrame {
 			erroNumero();
 		} else {
 			try {
-				Banco.getInstance().renderBonus(numero);
+				fachadaBanco.renderBonus(numero);
 				sucesso("Bonus creditado com sucesso");
 			} catch (ContaNaoEncontradaException e) {
 				erroNumero(e.getMessage());
