@@ -65,7 +65,6 @@ public class FrameBanco extends JFrame {
 			try {
 				fachadaBanco = Banco.getInstance();
 			} catch (InicializacaoSistemaException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
 			
