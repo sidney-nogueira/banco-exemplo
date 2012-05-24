@@ -4,18 +4,39 @@ import br.ufrpe.poo.banco.dados.RepositorioContas;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 
+/**
+ * Implementação para o sistema do banco.
+ */
 public class Banco implements IBanco {
 
+	/**
+	 * Repositorio de contas.
+	 */
 	private RepositorioContas contas;
 
+	/**
+	 * Taxa dos juros da poupanca.
+	 */
 	private final double TAXA_RENDIMENTO_POUPANCA = 0.008;
 
+	/**
+	 * Instancia unica para o sistema do banco.
+	 */
 	private static IBanco instance;
 
+	/**
+	 * Constroi um banco a partir do repositorio fornecido.
+	 * @param rep repositorio das contas.
+	 */
 	private Banco(RepositorioContas rep) {
 		this.contas = rep;
 	}
 	
+	/**
+	 * Retorna referencia para a instancia do banco.
+	 * @return instancia do banco.
+	 * @throws InicializacaoSistemaException lancada caso nao seja possivel inicializar o banco.
+	 */
 	public static IBanco getInstance() throws InicializacaoSistemaException {
 		if (Banco.instance == null) {
 			try {
@@ -28,6 +49,8 @@ public class Banco implements IBanco {
 		return Banco.instance;
 	}
 
+	
+	@Override
 	public void cadastrar(ContaAbstrata conta) throws RepositorioException,
 			ContaJaCadastradaException {
 		String numero = conta.getNumero();
@@ -38,6 +61,7 @@ public class Banco implements IBanco {
 		}
 	}
 
+	@Override
 	public void creditar(String numero, double valor)
 			throws RepositorioException, ContaNaoEncontradaException {
 		ContaAbstrata c = contas.procurar(numero);
@@ -48,6 +72,7 @@ public class Banco implements IBanco {
 		contas.atualizar(c);
 	}
 
+	@Override
 	public void debitar(String numero, double valor)
 			throws RepositorioException, ContaNaoEncontradaException,
 			SaldoInsuficienteException {
@@ -59,6 +84,7 @@ public class Banco implements IBanco {
 		contas.atualizar(c);
 	}
 
+	@Override
 	public double getSaldo(String numero) throws RepositorioException,
 			ContaNaoEncontradaException {
 		ContaAbstrata c = contas.procurar(numero);
@@ -68,6 +94,7 @@ public class Banco implements IBanco {
 		return c.getSaldo();
 	}
 
+	@Override
 	public void transferir(String de, String para, double valor)
 			throws RepositorioException, ContaNaoEncontradaException,
 			SaldoInsuficienteException {
@@ -82,6 +109,7 @@ public class Banco implements IBanco {
 		contas.atualizar(destino);
 	}
 
+	@Override
 	public void renderJuros(String numero) throws RepositorioException,
 			ContaNaoEncontradaException, RenderJurosPoupancaException {
 		ContaAbstrata c = contas.procurar(numero);
@@ -96,6 +124,7 @@ public class Banco implements IBanco {
 		}
 	}
 
+	@Override
 	public void renderBonus(String numero) throws RepositorioException,
 			ContaNaoEncontradaException, RenderBonusContaEspecialException {
 		ContaAbstrata c = contas.procurar(numero);
