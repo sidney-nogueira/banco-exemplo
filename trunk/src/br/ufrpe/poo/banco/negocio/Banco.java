@@ -1,7 +1,6 @@
 package br.ufrpe.poo.banco.negocio;
 
 import br.ufrpe.poo.banco.dados.RepositorioContas;
-import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoTxt;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 
