@@ -2,6 +2,7 @@ package br.ufrpe.poo.banco.negocio;
 
 import br.ufrpe.poo.banco.dados.RepositorioContas;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
+import br.ufrpe.poo.banco.dados.RepositorioContasArquivoTxt;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 
 /**
@@ -40,7 +41,7 @@ public class Banco implements IBanco {
 	public static IBanco getInstance() throws InicializacaoSistemaException {
 		if (Banco.instance == null) {
 			try {
-				Banco.instance = new Banco(new RepositorioContasArquivoBin());
+				Banco.instance = new Banco(new RepositorioContasArquivoTxt(new java.io.File("a.txt")));
 			} catch (RepositorioException e) {
 				e.printStackTrace();
 				throw new InicializacaoSistemaException();
