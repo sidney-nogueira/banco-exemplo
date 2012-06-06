@@ -117,7 +117,7 @@ public class FrameBanco extends JFrame {
 	 */
 	private void initialize() {
 		this.setSize(382, 207);
-		 this.setLocationRelativeTo(null);  //centraliza na tela
+		this.setLocationRelativeTo(null);  //centraliza na tela
 		this.setContentPane(getJContentPane());
 		this.setTitle("Aplicacao Bancaria");
 	}

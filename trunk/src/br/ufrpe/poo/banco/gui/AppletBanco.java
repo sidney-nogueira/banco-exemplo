@@ -16,10 +16,10 @@ public class AppletBanco extends JApplet {
 	 * This method initializes 
 	 * 
 	 */
-	public AppletBanco() {
+	/*public AppletBanco() {
 		super();
 		
-	}
+	}*/
 
 	/**
 	 * This method initializes this
@@ -39,8 +39,9 @@ public class AppletBanco extends JApplet {
 	private JButton getJButton() {
 		if (bt_inicia == null) {
 			bt_inicia = new JButton();
-			bt_inicia.setBounds(new Rectangle(5, 25, 122, 29));
+			bt_inicia.setBounds(2, 25, 120, 30);
 			bt_inicia.setText("Iniciar banco");
+			bt_inicia.setMnemonic('i');
 			bt_inicia.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					FrameBanco frame = new FrameBanco();
