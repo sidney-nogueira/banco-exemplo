@@ -16,10 +16,10 @@ public class AppletBanco extends JApplet {
 	 * This method initializes 
 	 * 
 	 */
-	/*public AppletBanco() {
+	public AppletBanco() {
 		super();
 		
-	}*/
+	}
 
 	/**
 	 * This method initializes this
