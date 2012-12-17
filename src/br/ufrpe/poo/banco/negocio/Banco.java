@@ -6,7 +6,7 @@ import br.ufrpe.poo.banco.dados.RepositorioException;
 
 
 /**
- * Implementa�‹o para o sistema do banco.
+ * Implementacao para o sistema do banco.
  */
 public class Banco implements IBanco {
 	
@@ -32,7 +32,7 @@ public class Banco implements IBanco {
 	 * Constroi um banco a partir do repositorio fornecido.
 	 * @param rep repositorio das contas.
 	 */
-	public Banco(RepositorioContas rep) {
+	private Banco(RepositorioContas rep) {
 		this.contas = rep;
 	}
 	
