@@ -23,7 +23,7 @@ import br.ufrpe.poo.banco.negocio.Poupanca;
  * tipoConta e um valor inteiro para o tipo da conta: 0 - Conta, 1 - Poupanca, 2
  * - ContaImposto e 3 - ContaEspecial
  */
-public class RepositorioContasArquivoTxt implements RepositorioContas {
+public class RepositorioContasArquivoTxt implements IRepositorioContas {
 
 	/** Contas do arquivo sao mantidas em memoria. */
 	private RepositorioContasArray contas;

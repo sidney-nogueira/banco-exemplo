@@ -9,7 +9,7 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
  * 
  * Tamanho do array cresce sob demanda.
  */
-public class RepositorioContasArray implements RepositorioContas {
+public class RepositorioContasArray implements IRepositorioContas {
 
 	/** Array que mantem as contas. */
 	private ContaAbstrata[] contas;
@@ -22,7 +22,7 @@ public class RepositorioContasArray implements RepositorioContas {
 	 * 
 	 * Tamanho inicial do array sao 100 posicoes.
 	 */
-	public RepositorioContasArray() {
+	public RepositorioContasArray() throws RepositorioException {
 		contas = new ContaAbstrata[100];
 		indice = 0;
 	}

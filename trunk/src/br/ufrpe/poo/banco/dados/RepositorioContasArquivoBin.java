@@ -16,7 +16,7 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
  * Implementacao de repositorio de contas que persiste os objetos das contas em
  * arquivo.
  */
-public class RepositorioContasArquivoBin implements RepositorioContas {
+public class RepositorioContasArquivoBin implements IRepositorioContas {
 
 	/** Contas do arquivo sao guardadas em memoria num repositorio de contas. */
 	private RepositorioContasArray contas;
