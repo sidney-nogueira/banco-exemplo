@@ -7,7 +7,7 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
  * Interface que representa um repositorio de objetos do tipo <code>Conta</code>
  * .
  */
-public interface RepositorioContas {
+public interface IRepositorioContas {
 
 	/**
 	 * Insere uma conta no reposit—rio.

@@ -1,7 +1,9 @@
 package br.ufrpe.poo.banco.negocio;
 
-import br.ufrpe.poo.banco.dados.RepositorioContas;
+import br.ufrpe.poo.banco.dados.IRepositorioContas;
+import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoTxt;
+import br.ufrpe.poo.banco.dados.RepositorioContasArray;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 
 
@@ -16,7 +18,7 @@ public class Banco implements IBanco {
 	/**
 	 * Repositorio de contas.
 	 */
-	private RepositorioContas contas;
+	private IRepositorioContas contas;
 
 	/**
 	 * Taxa dos juros da poupanca.
@@ -32,7 +34,7 @@ public class Banco implements IBanco {
 	 * Constroi um banco a partir do repositorio fornecido.
 	 * @param rep repositorio das contas.
 	 */
-	private Banco(RepositorioContas rep) {
+	private Banco(IRepositorioContas rep) {
 		this.contas = rep;
 	}
 	
@@ -44,7 +46,8 @@ public class Banco implements IBanco {
 	public static IBanco getInstance() throws InicializacaoSistemaException {
 		if (Banco.instance == null) {
 			try {
-				Banco.instance = new Banco(new RepositorioContasArquivoTxt(new java.io.File("a.txt")));
+				Banco.instance = new Banco(new RepositorioContasArray());
+//				Banco.instance = new Banco(new RepositorioContasArquivoTxt(new java.io.File("contas.txt")));
 			} catch (RepositorioException e) {
 				e.printStackTrace();
 				throw new InicializacaoSistemaException();
