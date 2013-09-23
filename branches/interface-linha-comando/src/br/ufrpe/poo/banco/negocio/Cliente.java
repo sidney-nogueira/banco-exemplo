@@ -16,6 +16,10 @@ public class Cliente implements Serializable{
 		this.contas = new ArrayList<Conta>();
 	}
 
+	public Cliente() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getNome() {
 		return nome;
 	}
