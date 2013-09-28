@@ -2,6 +2,8 @@ package br.ufrpe.poo.banco.negocio;
 
 import java.io.Serializable;
 
+import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
+
 public abstract class ContaAbstrata implements Serializable {
 
 	private String numero;

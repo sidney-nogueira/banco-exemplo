@@ -1,4 +1,4 @@
-package br.ufrpe.poo.banco.negocio;
+package br.ufrpe.poo.banco.exceptions;
 
 public class SaldoInsuficienteException extends Exception {
 

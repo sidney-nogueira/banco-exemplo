@@ -1,5 +1,6 @@
 package br.ufrpe.poo.banco.dados;
 
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.iterator.IteratorCliente;
 import br.ufrpe.poo.banco.negocio.Cliente;
 

@@ -1,4 +1,4 @@
-package br.ufrpe.poo.banco.gui;
+package br.ufrpe.poo.banco.exceptions;
 
 public class OpcaoMenuInvalidaException extends Exception {
 

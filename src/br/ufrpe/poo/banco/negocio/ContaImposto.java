@@ -1,5 +1,7 @@
 package br.ufrpe.poo.banco.negocio;
 
+import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
+
 public class ContaImposto extends ContaAbstrata {
 
 	public static final double CPMF = 0.0038;

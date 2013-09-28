@@ -1,4 +1,4 @@
-package br.ufrpe.poo.banco.dados;
+package br.ufrpe.poo.banco.exceptions;
 
 /**
  * Excecao que representa erros de acesso a um meio de armazenamento

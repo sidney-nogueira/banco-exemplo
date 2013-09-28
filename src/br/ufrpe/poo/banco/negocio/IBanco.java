@@ -1,6 +1,11 @@
 package br.ufrpe.poo.banco.negocio;
 
-import br.ufrpe.poo.banco.dados.RepositorioException;
+import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
+import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
+import br.ufrpe.poo.banco.exceptions.RenderBonusContaEspecialException;
+import br.ufrpe.poo.banco.exceptions.RenderJurosPoupancaException;
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
+import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
 
 /**
  * Interface para a fachada do sistema do banco.
