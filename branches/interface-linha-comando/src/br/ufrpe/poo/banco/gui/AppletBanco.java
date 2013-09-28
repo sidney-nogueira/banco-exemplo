@@ -1,11 +1,12 @@
 package br.ufrpe.poo.banco.gui;
 
 import java.awt.Dimension;
-import java.awt.Rectangle;
 
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
 
 public class AppletBanco extends JApplet {
 
@@ -44,7 +45,12 @@ public class AppletBanco extends JApplet {
 			bt_inicia.setMnemonic('i');
 			bt_inicia.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					FrameBanco frame = new FrameBanco();
+					FrameBanco frame = null;
+					try {
+						frame = new FrameBanco();
+					} catch (RepositorioException e1) {
+						e1.printStackTrace();
+					}
 					frame.setVisible(true);
 				}
 			});

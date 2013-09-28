@@ -1,5 +1,7 @@
 package br.ufrpe.poo.banco.negocio;
 
+import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
+
 public class Conta extends ContaAbstrata {
 
 	public Conta(String numero, double valor) {

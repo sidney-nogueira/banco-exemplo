@@ -4,22 +4,34 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufrpe.poo.banco.exceptions.ContaJaAdicionadaException;
+import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
+
 public class Cliente implements Serializable{
 	
 	private String nome;
 	private String cpf;
-	private List<Conta> contas;
+	private List<String> contas;
 	
 	public Cliente(String nome, String cpf){
 		this.nome = nome;
 		this.cpf = cpf;
-		this.contas = new ArrayList<Conta>();
+		this.contas = new ArrayList<String>();
 	}
-
-	public Cliente() {
-		// TODO Auto-generated constructor stub
+	
+	public void adicionarConta(String numero) throws ContaJaAdicionadaException{
+		if(this.contas.contains(numero))
+			throw new ContaJaAdicionadaException();
+		this.contas.add(numero);
 	}
-
+	
+	public void removerConta(String numero) throws ContaNaoEncontradaException{
+		int index = this.contas.indexOf(numero);
+		if(index == -1)
+			throw new ContaNaoEncontradaException();
+		this.contas.remove(index);
+	}
+	
 	public String getNome() {
 		return nome;
 	}
@@ -34,35 +46,6 @@ public class Cliente implements Serializable{
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
-	}
-
-	public ArrayList<Conta> getContas() {
-		return (ArrayList<Conta>) contas;
-	}
-	
-	public void adicionarConta(Conta conta) throws ContaJaAdicionadaException{
-		if(existeConta(conta.getNumero()) == -1)
-			throw new ContaJaAdicionadaException();
-		this.contas.add(conta);
-	}
-	
-	public void atualizarConta(Conta conta) throws ContaDeClienteInexistente{
-		int indice = this.existeConta(conta.getNumero());
-		if(indice == -1)
-			throw new ContaDeClienteInexistente();
-		this.contas.set(indice, conta);
-	}
-	
-	public void removerConta(String numero) throws ContaDeClienteInexistente{
-		int indice = this.existeConta(numero);
-		if(indice == -1)
-			throw new ContaDeClienteInexistente();
-		this.contas.remove(indice);
-	}
-	
-	private int existeConta(String numero){
-		Conta conta = new Conta(numero, 0);
-		return (this.contas.indexOf(conta));
 	}
 	
 	@Override

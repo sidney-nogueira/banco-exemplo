@@ -11,24 +11,21 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import br.ufrpe.poo.banco.dados.RepositorioException;
+import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
+import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
+import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
+import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
 import br.ufrpe.poo.banco.negocio.Banco;
 import br.ufrpe.poo.banco.negocio.Conta;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 import br.ufrpe.poo.banco.negocio.ContaEspecial;
 import br.ufrpe.poo.banco.negocio.ContaImposto;
-import br.ufrpe.poo.banco.negocio.ContaJaCadastradaException;
-import br.ufrpe.poo.banco.negocio.ContaNaoEncontradaException;
-import br.ufrpe.poo.banco.negocio.IBanco;
-import br.ufrpe.poo.banco.negocio.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.negocio.Poupanca;
-import br.ufrpe.poo.banco.negocio.RenderBonusContaEspecialException;
-import br.ufrpe.poo.banco.negocio.RenderJurosPoupancaException;
-import br.ufrpe.poo.banco.negocio.SaldoInsuficienteException;
 
 public class FrameBanco extends JFrame {
 
-	private IBanco fachadaBanco;
+	private Banco fachadaBanco;
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -37,8 +34,8 @@ public class FrameBanco extends JFrame {
 	private JButton bt_debitar = null;
 	private JButton bt_transferir = null;
 	private JButton bt_saldo = null;
-	private JButton bt_renderJuros = null;
-	private JButton bt_renderBonus = null;
+//	private JButton bt_renderJuros = null;
+//	private JButton bt_renderBonus = null;
 	private JLabel jLabel1 = null;
 	private JLabel jLabel = null;
 	private JTextField tf_numero = null;
@@ -57,8 +54,9 @@ public class FrameBanco extends JFrame {
 	private JPanel jPanel1 = null;
 	/**
 	 * This is the default constructor
+	 * @throws RepositorioException 
 	 */
-	public FrameBanco() {
+	public FrameBanco() throws RepositorioException {
 		super();
 			initialize();
 			
@@ -141,8 +139,8 @@ public class FrameBanco extends JFrame {
 			jContentPane.add(getBt_debitar(), null);
 			jContentPane.add(getBt_transferir(), null);
 			jContentPane.add(getBt_saldo(), null);
-			jContentPane.add(getBt_renderJuros(), null);
-			jContentPane.add(getBt_renderBonus(), null);
+//			jContentPane.add(getBt_renderJuros(), null);
+//			jContentPane.add(getBt_renderBonus(), null);
 			jContentPane.add(jLabel1, null);
 			jContentPane.add(jLabel, null);
 			jContentPane.add(getJPanel(), null);
@@ -188,7 +186,7 @@ public class FrameBanco extends JFrame {
 				} else if(rb_contaImposto.isSelected()) {
 					conta = new ContaImposto(numero, valor);
 				}
-				fachadaBanco.cadastrar(conta);
+				fachadaBanco.cadastrarConta(conta);
 				sucesso(conta.getClass().getSimpleName()+" cadastrada com sucesso");
 			} catch (NumberFormatException e) {
 				erroConversao();
@@ -368,74 +366,74 @@ public class FrameBanco extends JFrame {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getBt_renderJuros() {
-		if (bt_renderJuros == null) {
-			bt_renderJuros = new JButton();
-			bt_renderJuros.setBounds(new Rectangle(217, 148, 113, 29));
-			bt_renderJuros.setText("Render juros");
-			bt_renderJuros.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					renderJuros();
-				}
-			});
-		}
-		return bt_renderJuros;
-	}
+//	private JButton getBt_renderJuros() {
+//		if (bt_renderJuros == null) {
+//			bt_renderJuros = new JButton();
+//			bt_renderJuros.setBounds(new Rectangle(217, 148, 113, 29));
+//			bt_renderJuros.setText("Render juros");
+//			bt_renderJuros.addActionListener(new java.awt.event.ActionListener() {
+//				public void actionPerformed(java.awt.event.ActionEvent e) {
+//					renderJuros();
+//				}
+//			});
+//		}
+//		return bt_renderJuros;
+//	}
 
-	private void renderJuros() {
-		String numero = tf_numero.getText();
-		if (numero.equals("")) {
-			erroNumero();
-		} else {
-			try {
-				fachadaBanco.renderJuros(numero);
-				sucesso("Juros creditado com sucesso");
-			} catch (ContaNaoEncontradaException e) {
-				erroNumero(e.getMessage());
-			} catch (RenderJurosPoupancaException e) {
-				erroNumero(e.getMessage());
-			} catch (RepositorioException e) {
-				erroRepositorio(e.getMessage());
-			}
-		}
-	}
+//	private void renderJuros() {
+//		String numero = tf_numero.getText();
+//		if (numero.equals("")) {
+//			erroNumero();
+//		} else {
+//			try {
+//				fachadaBanco.renderJuros(numero);
+//				sucesso("Juros creditado com sucesso");
+//			} catch (ContaNaoEncontradaException e) {
+//				erroNumero(e.getMessage());
+//			} catch (RenderJurosPoupancaException e) {
+//				erroNumero(e.getMessage());
+//			} catch (RepositorioException e) {
+//				erroRepositorio(e.getMessage());
+//			}
+//		}
+//	}
 
 	/**
 	 * This method initializes bt_renderBonus	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getBt_renderBonus() {
-		if (bt_renderBonus == null) {
-			bt_renderBonus = new JButton();
-			bt_renderBonus.setBounds(new Rectangle(52, 148, 113, 29));
-			bt_renderBonus.setText("Render bonus");
-			bt_renderBonus.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					renderBonus();
-				}
-			});
-		}
-		return bt_renderBonus;
-	}
+//	private JButton getBt_renderBonus() {
+//		if (bt_renderBonus == null) {
+//			bt_renderBonus = new JButton();
+//			bt_renderBonus.setBounds(new Rectangle(52, 148, 113, 29));
+//			bt_renderBonus.setText("Render bonus");
+//			bt_renderBonus.addActionListener(new java.awt.event.ActionListener() {
+//				public void actionPerformed(java.awt.event.ActionEvent e) {
+//					renderBonus();
+//				}
+//			});
+//		}
+//		return bt_renderBonus;
+//	}
 
-	private void renderBonus() {
-		String numero = tf_numero.getText();
-		if (numero.equals("")) {
-			erroNumero();
-		} else {
-			try {
-				fachadaBanco.renderBonus(numero);
-				sucesso("Bonus creditado com sucesso");
-			} catch (ContaNaoEncontradaException e) {
-				erroNumero(e.getMessage());
-			} catch (RenderBonusContaEspecialException e) {
-				erroNumero(e.getMessage());
-			} catch (RepositorioException e) {
-				erroRepositorio(e.getMessage());
-			}
-		}
-	}
+//	private void renderBonus() {
+//		String numero = tf_numero.getText();
+//		if (numero.equals("")) {
+//			erroNumero();
+//		} else {
+//			try {
+//				fachadaBanco.renderBonus(numero);
+//				sucesso("Bonus creditado com sucesso");
+//			} catch (ContaNaoEncontradaException e) {
+//				erroNumero(e.getMessage());
+//			} catch (RenderBonusContaEspecialException e) {
+//				erroNumero(e.getMessage());
+//			} catch (RepositorioException e) {
+//				erroRepositorio(e.getMessage());
+//			}
+//		}
+//	}
 
 	/**
 	 * This method initializes tf_numero	
