@@ -88,7 +88,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public IteratorCliente getIterator() {
+	public IteratorCliente getIterator() throws RepositorioException{
 		return new IteratorClienteArray(this.clientes);
 	}
 

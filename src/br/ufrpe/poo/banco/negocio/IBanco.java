@@ -120,4 +120,34 @@ public interface IBanco {
 	 */
 	void renderBonus(String numero) throws RepositorioException,
 			ContaNaoEncontradaException, RenderBonusContaEspecialException;
+	
+	// @Override
+		// public void renderJuros(String numero) throws RepositorioException,
+		// ContaNaoEncontradaException, RenderJurosPoupancaException {
+		// ContaAbstrata c = contas.procurar(numero);
+		// if (c == null) {
+		// throw new ContaNaoEncontradaException();
+		// }
+		// if (c instanceof Poupanca) {
+		// ((Poupanca) c).renderJuros(TAXA_RENDIMENTO_POUPANCA);
+		// contas.atualizar(c);
+		// } else {
+		// throw new RenderJurosPoupancaException();
+		// }
+		// }
+		//
+		// @Override
+		// public void renderBonus(String numero) throws RepositorioException,
+		// ContaNaoEncontradaException, RenderBonusContaEspecialException {
+		// ContaAbstrata c = contas.procurar(numero);
+		// if (c == null) {
+		// throw new ContaNaoEncontradaException();
+		// }
+		// if (c instanceof ContaEspecial) {
+		// ((ContaEspecial) c).renderBonus();
+		// contas.atualizar(c);
+		// } else {
+		// throw new RenderBonusContaEspecialException();
+		// }
+		// }
 }

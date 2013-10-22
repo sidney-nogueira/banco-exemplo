@@ -111,7 +111,7 @@ public class RepositorioContasArray implements IRepositorioContas {
 	}
 
 	@Override
-	public IteratorContaAbstrata getIterator() {
+	public IteratorContaAbstrata getIterator() throws RepositorioException{
 		return new IteratorContaAbstrataArray(this.contas);
 	}
 }

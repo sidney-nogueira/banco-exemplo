@@ -51,7 +51,7 @@ public interface IRepositorioContas {
 	 * 
 	 * @param conta
 	 *            conta a ser atualizada.
-	 * @return se conta foi removida. Se conta nao existe e retornado
+	 * @return se conta foi atualizada. Se conta nao existe e retornado
 	 *         <code>false<code/>.
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.

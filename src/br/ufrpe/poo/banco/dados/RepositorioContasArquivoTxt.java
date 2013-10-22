@@ -214,7 +214,7 @@ public class RepositorioContasArquivoTxt implements IRepositorioContas {
 	}
 
 	@Override
-	public IteratorContaAbstrata getIterator() {
+	public IteratorContaAbstrata getIterator() throws RepositorioException {
 		return contas.getIterator();
 	}
 }

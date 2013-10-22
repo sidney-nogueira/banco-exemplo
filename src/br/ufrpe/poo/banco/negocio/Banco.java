@@ -10,22 +10,54 @@ import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
-import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
 
+/**
+ * Implementacao do sistema bancario que faz a comunicacao com a persistencia e
+ * a gui.
+ * 
+ * @author
+ * 
+ */
 public class Banco implements IGerencia, ICliente {
 
+	/**
+	 * Instancia do repositorio de clientes.
+	 */
 	private IRepositorioClientes clientes;
 
+	/**
+	 * Instacia do repositorio de contas
+	 */
 	private IRepositorioContas contas;
 
+	/**
+	 * Instancia da interface do gerenciador do banco.
+	 */
 	private static IGerencia gerenciaInstance;
 
+	/**
+	 * Instancia da interface do cliente do banco.
+	 */
 	private static ICliente clienteInstance;
 
+	/**
+	 * Instancia do comunicador.
+	 */
 	private static Banco instance;
 
+	/**
+	 * Retorna a instancia unica do banco.
+	 * 
+	 * @return se o banco nao foi instanciado. Se o banco ja foi instanciado eh
+	 *         retornado <code>null</code>.
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
+	 * @throws InicializacaoSistemaException
+	 *             Lancada quando ocorre erro no repositorio.
+	 */
 	public static Banco getInstance() throws RepositorioException,
 			InicializacaoSistemaException {
+
 		if (Banco.clienteInstance == null && Banco.gerenciaInstance == null) {
 			try {
 				Banco.clienteInstance = new Banco(
@@ -40,136 +72,74 @@ public class Banco implements IGerencia, ICliente {
 	}
 
 	public Banco(IRepositorioClientes repClientes) {
+
 		this.clientes = repClientes;
 	}
 
 	public Banco(IRepositorioContas repContas) {
+
 		this.contas = repContas;
 	}
 
 	@Override
-	public void removerContaCliente(String cpf, String numero)
-			throws ContaNaoEncontradaException, ClienteNaoCadastradoException,
-			RepositorioException {
-		Cliente cliente = this.clientes.procurar(cpf);
-		if (cliente != null)
-			cliente.removerConta(numero);
-		else
-			throw new ClienteNaoCadastradoException();
+	public void cadastrarCliente(Cliente cliente)
+			throws ClienteJaCadastradoException, RepositorioException {
 
-	}
-
-	@Override
-	public void adicionarContaCliente(String cpf, String numero)
-			throws ContaJaAdicionadaException, ClienteNaoCadastradoException,
-			RepositorioException {
-		Cliente cliente = this.clientes.procurar(cpf);
-		if (cliente != null)
-			cliente.adicionarConta(numero);
-		else
-			throw new ClienteNaoCadastradoException();
-
+		if (!this.clientes.inserir(cliente))
+			throw new ClienteJaCadastradoException();
 	}
 
 	@Override
 	public void cadastrarConta(ContaAbstrata conta)
-			throws RepositorioException, ContaJaCadastradaException {
-		String numero = conta.getNumero();
-		if (contas.existe(numero)) {
+			throws ContaJaCadastradaException, RepositorioException {
+
+		if (!this.contas.inserir(conta))
 			throw new ContaJaCadastradaException();
-		} else {
-			contas.inserir(conta);
-		}
 	}
 
 	@Override
-	public void removerConta(ContaAbstrata conta)
+	public void associarContaAoCliente(String numero, Cliente cliente)
+			throws ContaJaAdicionadaException, RepositorioException {
+
+		if (!cliente.adicionarConta(numero))
+			throw new ContaJaAdicionadaException();
+		this.atualizarCadastroCliente(cliente);
+	}
+
+	@Override
+	public Cliente procurarCliente(String cpf) throws RepositorioException {
+
+		return this.clientes.procurar(cpf);
+	}
+
+	@Override
+	public ContaAbstrata procurarConta(String numero)
+			throws RepositorioException {
+
+		return this.contas.procurar(numero);
+	}
+
+	@Override
+	public void atualizarCadastroCliente(Cliente cliente)
+			throws RepositorioException {
+
+		this.clientes.atualizar(cliente);
+	}
+
+	@Override
+	public void removerCadastroCliente(String cpf)
+			throws ClienteNaoCadastradoException, RepositorioException {
+
+		if (!this.clientes.remover(cpf))
+			throw new ClienteNaoCadastradoException();
+	}
+
+	@Override
+	public void removerCadastroConta(String numero)
 			throws ContaNaoEncontradaException, RepositorioException {
-		String numero = conta.getNumero();
-		if (!this.contas.existe(numero))
+
+		if (!this.contas.remover(numero))
 			throw new ContaNaoEncontradaException();
-		else
-			this.contas.remover(numero);
 	}
 
-	@Override
-	public void creditar(String numero, double valor)
-			throws RepositorioException, ContaNaoEncontradaException {
-		ContaAbstrata c = contas.procurar(numero);
-		if (c == null) {
-			throw new ContaNaoEncontradaException();
-		}
-		c.creditar(valor);
-		contas.atualizar(c);
-
-	}
-
-	@Override
-	public void debitar(String numero, double valor)
-			throws RepositorioException, ContaNaoEncontradaException,
-			SaldoInsuficienteException {
-		ContaAbstrata c = contas.procurar(numero);
-		if (c == null) {
-			throw new ContaNaoEncontradaException();
-		}
-		c.debitar(valor);
-		contas.atualizar(c);
-
-	}
-
-	@Override
-	public double getSaldo(String numero) throws RepositorioException,
-			ContaNaoEncontradaException {
-		ContaAbstrata c = contas.procurar(numero);
-		if (c == null) {
-			throw new ContaNaoEncontradaException();
-		}
-		return c.getSaldo();
-	}
-
-	@Override
-	public void transferir(String de, String para, double valor)
-			throws RepositorioException, ContaNaoEncontradaException,
-			SaldoInsuficienteException {
-		ContaAbstrata origem = contas.procurar(de);
-		ContaAbstrata destino = contas.procurar(para);
-		if (origem == null || destino == null) {
-			throw new ContaNaoEncontradaException();
-		}
-		origem.debitar(valor);
-		destino.creditar(valor);
-		contas.atualizar(origem);
-		contas.atualizar(destino);
-
-	}
-
-	// @Override
-	// public void renderJuros(String numero) throws RepositorioException,
-	// ContaNaoEncontradaException, RenderJurosPoupancaException {
-	// ContaAbstrata c = contas.procurar(numero);
-	// if (c == null) {
-	// throw new ContaNaoEncontradaException();
-	// }
-	// if (c instanceof Poupanca) {
-	// ((Poupanca) c).renderJuros(TAXA_RENDIMENTO_POUPANCA);
-	// contas.atualizar(c);
-	// } else {
-	// throw new RenderJurosPoupancaException();
-	// }
-	// }
-	//
-	// @Override
-	// public void renderBonus(String numero) throws RepositorioException,
-	// ContaNaoEncontradaException, RenderBonusContaEspecialException {
-	// ContaAbstrata c = contas.procurar(numero);
-	// if (c == null) {
-	// throw new ContaNaoEncontradaException();
-	// }
-	// if (c instanceof ContaEspecial) {
-	// ((ContaEspecial) c).renderBonus();
-	// contas.atualizar(c);
-	// } else {
-	// throw new RenderBonusContaEspecialException();
-	// }
-	// }
 }
