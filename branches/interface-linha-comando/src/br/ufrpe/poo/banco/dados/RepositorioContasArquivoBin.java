@@ -24,7 +24,7 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 
 	/** Caminho para arquivo que guarda as informacoes das contas. */
 	private final String ARQUIVO = "contas.dat";
-	
+
 	/** Arquivo que armazena as contas. */
 	private File arquivoContas;
 
@@ -32,6 +32,7 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	 * Constroi um repositorio a partir de contas armazenadas em arquivo.
 	 * 
 	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
 	 */
 	public RepositorioContasArquivoBin() throws RepositorioException {
 		try {
@@ -115,8 +116,8 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	@Override
 	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.inserir(conta);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
@@ -129,8 +130,8 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	@Override
 	public boolean remover(String numero) throws RepositorioException {
 		boolean sucesso = contas.remover(numero);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
@@ -138,8 +139,8 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	@Override
 	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.atualizar(conta);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}

@@ -3,11 +3,8 @@ package br.ufrpe.poo.banco.negocio;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import br.ufrpe.poo.banco.exceptions.ContaJaAdicionadaException;
-import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
-
 /**
- * Classe do tipo Cliente.
+ * Classe que representa o tipo Cliente.
  * 
  * @author
  * 
@@ -38,33 +35,44 @@ public class Cliente implements Serializable {
 	}
 
 	/**
-	 * Adiciona um numero de uma conta ao array de contas do cliente.
+	 * Aloca um numero de uma conta ao array de contas.
 	 * 
 	 * @param numero
-	 *            Numero a ser adicionado.
-	 * @throws ContaJaAdicionadaException
-	 *             Lancada caso o cliente ja possua uma conta com o numero
-	 *             passado.
+	 *            Numero da conta a ser alocado.
+	 * @return se conta foi alocada. Se ja existe o numero eh retornado
+	 *         <code>false</code>.
 	 */
-	public void adicionarConta(String numero) throws ContaJaAdicionadaException {
-		if (this.contas.contains(numero))
-			throw new ContaJaAdicionadaException();
-		this.contas.add(numero);
+	public boolean adicionarConta(String numero) {
+		if (this.existeConta(numero) != -1)
+			return false;
+		return this.contas.add(numero);
 	}
 
 	/**
-	 * Remove um numero de conta do array de contas do cliente.
+	 * Remove um numero de conta do array de contas.
 	 * 
 	 * @param numero
-	 *            Numero da conta ser removida.
-	 * @throws ContaNaoEncontradaException
-	 *             Lancada caso o numero passado para remocao nao existe.
+	 *            Numero da conta a ser removido.
+	 * @return se conta foi removida. Se nao existe o numero eh retornado
+	 *         <code>false</code>.
 	 */
-	public void removerConta(String numero) throws ContaNaoEncontradaException {
-		int index = this.contas.indexOf(numero);
+	public boolean removerConta(String numero) {
+		int index = this.existeConta(numero);
 		if (index == -1)
-			throw new ContaNaoEncontradaException();
+			return false;
 		this.contas.remove(index);
+		return true;
+	}
+
+	/**
+	 * Indica a existencia de um numero de conta no array.
+	 * 
+	 * @param numero
+	 *            Numero de conta a ser procurado.
+	 * @return se existe numero da conta. Se nao existe eh retornado -1.
+	 */
+	public int existeConta(String numero) {
+		return this.contas.indexOf(numero);
 	}
 
 	public String getNome() {

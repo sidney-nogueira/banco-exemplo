@@ -13,14 +13,36 @@ import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.iterator.IteratorCliente;
 import br.ufrpe.poo.banco.negocio.Cliente;
 
+/**
+ * Implementacao de repositorio de clientes que persiste os objetos das contas
+ * em arquivo.
+ * 
+ * @author
+ * 
+ */
 public class RepositorioClientesArquivoBin implements IRepositorioClientes {
-	
+
+	/**
+	 * Clientes do arquivo sao guardadas em memoria num repositorio de clientes.
+	 */
 	private RepositorioClientesArray clientes;
 
+	/**
+	 * Caminho para arquivo que guarda as informacoes das clientes.
+	 */
 	private final String ARQUIVO = "clientes.dat";
 
+	/**
+	 * Arquivo que armazena os clientes.
+	 */
 	private File arquivoClientes;
 
+	/**
+	 * Constroi um repositorio a partir de clientes armazenadas em arquivo.
+	 * 
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
+	 */
 	public RepositorioClientesArquivoBin() throws RepositorioException {
 		try {
 			this.clientes = new RepositorioClientesArray();
@@ -33,6 +55,12 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 		}
 	}
 
+	/**
+	 * Le os clientes a partir do arquivo.
+	 * 
+	 * @throws RepositorioException
+	 *             Lancada em caso de erro na leitura do arquivo.
+	 */
 	private void lerArquivo() throws RepositorioException {
 		FileInputStream fisBanco = null;
 		ObjectInputStream oisBanco = null;
@@ -63,6 +91,12 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 		}
 	}
 
+	/**
+	 * Serializa todos os clientes do array em um arquivo.
+	 * 
+	 * @throws RepositorioException
+	 *             Lancada caso ocorre um erro com o arquivo.
+	 */
 	public void gravarArquivo() throws RepositorioException {
 		FileOutputStream fosBanco = null;
 		ObjectOutputStream oosBanco = null;
@@ -87,12 +121,12 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean inserir(Cliente cliente) throws RepositorioException {
 		boolean sucesso = this.clientes.inserir(cliente);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
@@ -105,8 +139,8 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 	@Override
 	public boolean remover(String cpf) throws RepositorioException {
 		boolean sucesso = this.clientes.remover(cpf);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
@@ -114,8 +148,8 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 	@Override
 	public boolean atualizar(Cliente cliente) throws RepositorioException {
 		boolean sucesso = this.clientes.atualizar(cliente);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
@@ -126,7 +160,7 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 	}
 
 	@Override
-	public IteratorCliente getIterator() {
+	public IteratorCliente getIterator() throws RepositorioException {
 		return this.clientes.getIterator();
 	}
 

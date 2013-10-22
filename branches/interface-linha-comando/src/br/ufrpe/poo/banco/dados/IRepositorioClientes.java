@@ -25,22 +25,62 @@ public interface IRepositorioClientes {
 	 * 
 	 */
 	boolean inserir(Cliente cliente) throws RepositorioException;
-	
+
 	/**
 	 * Procurar por um cliente no repositorio a partir do seu cpf.
+	 * 
 	 * @param cpf
-	 * 			Numero do cpf a ser retornado.
-	 * @return cliente encontrado. Retorna <code>null</code> se o cliente nao foi encontrado.
-	 * @throws RepositorioException 
+	 *            Numero do cpf do cliente a ser retornado.
+	 * @return cliente encontrado. Retorna <code>null</code> se o cliente nao
+	 *         foi encontrado.
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
 	 */
 	Cliente procurar(String cpf) throws RepositorioException;
 
+	/**
+	 * Remove um cliente do repositorio.
+	 * 
+	 * @param cpf
+	 *            Numero do cpf do cliente a ser removido.
+	 * @return se cliente foi removido. Se cliente nao existe eh retornado
+	 *         <code>false<code/>.
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
+	 */
 	boolean remover(String cpf) throws RepositorioException;
 
+	/**
+	 * Atualiza os dados de um cliente no repositorio.
+	 * 
+	 * @param cliente
+	 *            Cliente a ser atualizado.
+	 * @return se foi atualizada. Se cliente nao existe eh retornado
+	 *         <code>false</code>.
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
+	 */
 	boolean atualizar(Cliente cliente) throws RepositorioException;
 
+	/**
+	 * Indica se existe um cliente no repositorio.
+	 * 
+	 * @param cpf
+	 *            Numero do cpf do cliente a ser localizado.
+	 * @return se cliente existe.
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
+	 */
 	boolean existe(String cpf) throws RepositorioException;
 
-	IteratorCliente getIterator();
+	/**
+	 * Retorna um iterador para acessar sequencialmente os clientes do
+	 * repositorio.
+	 * 
+	 * @return iterador para clientes.
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
+	 */
+	IteratorCliente getIterator() throws RepositorioException;
 
 }

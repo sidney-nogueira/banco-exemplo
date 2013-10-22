@@ -39,8 +39,8 @@ public class RepositorioClientesArquivoTxt implements IRepositorioClientes {
 		try {
 			s = new Scanner(arquivo);
 			while (s.hasNext()) {
-				String nome = s.nextLine();
-				String cpf = s.next();
+				// String nome = s.nextLine();
+				// String cpf = s.next();
 				// ArrayList<String> contas = s.
 				// cliente = new Cliente(nome, cpf, contas);
 				this.clientes.inserir(cliente);
@@ -127,7 +127,7 @@ public class RepositorioClientesArquivoTxt implements IRepositorioClientes {
 	}
 
 	@Override
-	public IteratorCliente getIterator() {
+	public IteratorCliente getIterator() throws RepositorioException {
 		return this.clientes.getIterator();
 	}
 
