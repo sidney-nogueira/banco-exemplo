@@ -1,9 +1,20 @@
 package br.ufrpe.poo.banco.negocio;
 
+/**
+ * Conta bancaria do tipo conta especial.
+ * 
+ * @author
+ * 
+ */
 public class ContaEspecial extends Conta {
-	
-	private double bonus;
-	
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Valor do bonus.
+	 */
+	protected double bonus;
+
 	public ContaEspecial(String numero, double saldo, double bonus) {
 		super(numero, saldo);
 		this.bonus = bonus;
@@ -16,6 +27,9 @@ public class ContaEspecial extends Conta {
 		bonus = bonus + (valor * 0.01);
 	}
 
+	/**
+	 * Credita valor de um bonus a conta especial.
+	 */
 	public void renderBonus() {
 		super.creditar(this.bonus);
 		bonus = 0;
@@ -24,4 +38,5 @@ public class ContaEspecial extends Conta {
 	public double getBonus() {
 		return this.bonus;
 	}
+	
 }

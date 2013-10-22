@@ -83,9 +83,9 @@ public class RepositorioContasArray implements IRepositorioContas {
 	public boolean remover(String numero) throws RepositorioException {
 		boolean sucesso = false;
 		int i = this.getIndice(numero);
-		if (i < this.indice) {//valida indice
+		if (i < this.indice) {// valida indice
 			// decrementa proximo indice livre
-			this.indice = this.indice - 1; 
+			this.indice = this.indice - 1;
 			// copia ultimo para removido
 			this.contas[i] = this.contas[this.indice];
 			// ultimo aponta para null

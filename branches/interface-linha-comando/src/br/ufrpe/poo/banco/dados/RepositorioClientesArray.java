@@ -1,5 +1,6 @@
 package br.ufrpe.poo.banco.dados;
 
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.iterator.IteratorCliente;
 import br.ufrpe.poo.banco.iterator.IteratorClienteArray;
 import br.ufrpe.poo.banco.negocio.Cliente;
@@ -7,6 +8,7 @@ import br.ufrpe.poo.banco.negocio.Cliente;
 public class RepositorioClientesArray implements IRepositorioClientes {
 
 	private Cliente[] clientes;
+
 	private int indice;
 
 	public RepositorioClientesArray() {
@@ -30,7 +32,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public boolean inserir(Cliente cliente) {
+	public boolean inserir(Cliente cliente) throws RepositorioException {
 		if (this.existe(cliente.getCpf())) {
 			return false;
 		}
@@ -48,7 +50,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public Cliente procurar(String cpf) {
+	public Cliente procurar(String cpf) throws RepositorioException {
 		Cliente cliente = null;
 		int i = this.getIndice(cpf);
 		if (i < this.indice) {
@@ -58,7 +60,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public boolean remover(String cpf) {
+	public boolean remover(String cpf) throws RepositorioException {
 		boolean sucesso = false;
 		int i = this.getIndice(cpf);
 		if (i < this.indice) {
@@ -70,7 +72,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public boolean atualizar(Cliente cliente) {
+	public boolean atualizar(Cliente cliente) throws RepositorioException {
 		boolean sucesso = false;
 		int i = this.getIndice(cliente.getCpf());
 		if (i < this.indice) {
@@ -80,7 +82,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public boolean existe(String cpf) {
+	public boolean existe(String cpf) throws RepositorioException {
 		int i = this.getIndice(cpf);
 		return (i != this.indice);
 	}

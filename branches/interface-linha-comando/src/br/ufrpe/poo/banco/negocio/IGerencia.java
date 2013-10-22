@@ -8,10 +8,12 @@ import br.ufrpe.poo.banco.exceptions.RepositorioException;
 
 public interface IGerencia {
 	
-	void adicionarContaCliente(String cpf, String numero) throws ContaJaAdicionadaException, ClienteNaoCadastradoException;
+	void adicionarContaCliente(String cpf, String numero)
+			throws ContaJaAdicionadaException, ClienteNaoCadastradoException,
+			RepositorioException;
 
 	void removerContaCliente(String cpf, String numero)
-			throws ContaNaoEncontradaException, ClienteNaoCadastradoException;
+			throws ContaNaoEncontradaException, ClienteNaoCadastradoException, RepositorioException;
 	
 	void cadastrarConta(ContaAbstrata conta) throws RepositorioException,
 	ContaJaCadastradaException;

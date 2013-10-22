@@ -21,33 +21,36 @@ public class Banco implements IGerencia, ICliente {
 	private static IGerencia gerenciaInstance;
 
 	private static ICliente clienteInstance;
-	
+
 	private static Banco instance;
 
-	public static Banco getInstance() throws RepositorioException, InicializacaoSistemaException {
-		if(Banco.clienteInstance == null && Banco.gerenciaInstance == null){
-			try{
-			Banco.clienteInstance = new Banco(new RepositorioClientesArquivoBin());
-			Banco.gerenciaInstance = new Banco(new RepositorioContasArquivoBin());
-			}catch(RepositorioException e){
+	public static Banco getInstance() throws RepositorioException,
+			InicializacaoSistemaException {
+		if (Banco.clienteInstance == null && Banco.gerenciaInstance == null) {
+			try {
+				Banco.clienteInstance = new Banco(
+						new RepositorioClientesArquivoBin());
+				Banco.gerenciaInstance = new Banco(
+						new RepositorioContasArquivoBin());
+			} catch (RepositorioException e) {
 				throw new InicializacaoSistemaException();
 			}
 		}
 		return Banco.instance;
 	}
-	
+
 	public Banco(IRepositorioClientes repClientes) {
 		this.clientes = repClientes;
 	}
-	
-	public Banco(IRepositorioContas repContas){
+
+	public Banco(IRepositorioContas repContas) {
 		this.contas = repContas;
 	}
-	
 
 	@Override
 	public void removerContaCliente(String cpf, String numero)
-			throws ContaNaoEncontradaException, ClienteNaoCadastradoException {
+			throws ContaNaoEncontradaException, ClienteNaoCadastradoException,
+			RepositorioException {
 		Cliente cliente = this.clientes.procurar(cpf);
 		if (cliente != null)
 			cliente.removerConta(numero);
@@ -58,7 +61,8 @@ public class Banco implements IGerencia, ICliente {
 
 	@Override
 	public void adicionarContaCliente(String cpf, String numero)
-			throws ContaJaAdicionadaException, ClienteNaoCadastradoException {
+			throws ContaJaAdicionadaException, ClienteNaoCadastradoException,
+			RepositorioException {
 		Cliente cliente = this.clientes.procurar(cpf);
 		if (cliente != null)
 			cliente.adicionarConta(numero);
@@ -139,34 +143,33 @@ public class Banco implements IGerencia, ICliente {
 
 	}
 
-	
-//	@Override
-//	public void renderJuros(String numero) throws RepositorioException,
-//			ContaNaoEncontradaException, RenderJurosPoupancaException {
-//		ContaAbstrata c = contas.procurar(numero);
-//		if (c == null) {
-//			throw new ContaNaoEncontradaException();
-//		}
-//		if (c instanceof Poupanca) {
-//			((Poupanca) c).renderJuros(TAXA_RENDIMENTO_POUPANCA);
-//			contas.atualizar(c);
-//		} else {
-//			throw new RenderJurosPoupancaException();
-//		}
-//	}
-//
-//	@Override
-//	public void renderBonus(String numero) throws RepositorioException,
-//			ContaNaoEncontradaException, RenderBonusContaEspecialException {
-//		ContaAbstrata c = contas.procurar(numero);
-//		if (c == null) {
-//			throw new ContaNaoEncontradaException();
-//		}
-//		if (c instanceof ContaEspecial) {
-//			((ContaEspecial) c).renderBonus();
-//			contas.atualizar(c);
-//		} else {
-//			throw new RenderBonusContaEspecialException();
-//		}
-//	}
+	// @Override
+	// public void renderJuros(String numero) throws RepositorioException,
+	// ContaNaoEncontradaException, RenderJurosPoupancaException {
+	// ContaAbstrata c = contas.procurar(numero);
+	// if (c == null) {
+	// throw new ContaNaoEncontradaException();
+	// }
+	// if (c instanceof Poupanca) {
+	// ((Poupanca) c).renderJuros(TAXA_RENDIMENTO_POUPANCA);
+	// contas.atualizar(c);
+	// } else {
+	// throw new RenderJurosPoupancaException();
+	// }
+	// }
+	//
+	// @Override
+	// public void renderBonus(String numero) throws RepositorioException,
+	// ContaNaoEncontradaException, RenderBonusContaEspecialException {
+	// ContaAbstrata c = contas.procurar(numero);
+	// if (c == null) {
+	// throw new ContaNaoEncontradaException();
+	// }
+	// if (c instanceof ContaEspecial) {
+	// ((ContaEspecial) c).renderBonus();
+	// contas.atualizar(c);
+	// } else {
+	// throw new RenderBonusContaEspecialException();
+	// }
+	// }
 }

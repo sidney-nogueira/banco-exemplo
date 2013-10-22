@@ -98,7 +98,7 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 	}
 
 	@Override
-	public Cliente procurar(String cpf) {
+	public Cliente procurar(String cpf) throws RepositorioException {
 		return this.clientes.procurar(cpf);
 	}
 
@@ -121,7 +121,7 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 	}
 
 	@Override
-	public boolean existe(String cpf) {
+	public boolean existe(String cpf) throws RepositorioException {
 		return this.clientes.existe(cpf);
 	}
 
