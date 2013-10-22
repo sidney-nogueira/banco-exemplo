@@ -2,8 +2,19 @@ package br.ufrpe.poo.banco.negocio;
 
 import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
 
+/**
+ * Conta bancaria do tipo conta imposto.
+ * 
+ * @author
+ * 
+ */
 public class ContaImposto extends ContaAbstrata {
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Valor do CPMF.
+	 */
 	public static final double CPMF = 0.0038;
 
 	public ContaImposto(String numero, double valor) {

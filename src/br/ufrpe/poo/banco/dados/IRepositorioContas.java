@@ -11,7 +11,7 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 public interface IRepositorioContas {
 
 	/**
-	 * Insere uma conta no reposit—rio.
+	 * Insere uma conta no repositorio.
 	 * 
 	 * @param conta
 	 *            conta a ser inserida.
@@ -27,7 +27,7 @@ public interface IRepositorioContas {
 	 * 
 	 * @param numero
 	 *            numero da conta a ser retornada.
-	 * @return conta encontrada. Retornada <code>null</code> se a conta nao foi
+	 * @return conta encontrada. Retorna <code>null</code> se a conta nao foi
 	 *         encontrada.
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
