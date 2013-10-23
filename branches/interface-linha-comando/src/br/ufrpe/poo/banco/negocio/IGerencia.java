@@ -1,5 +1,6 @@
 package br.ufrpe.poo.banco.negocio;
 
+import br.ufrpe.poo.banco.exceptions.ClienteJaCadastradoException;
 import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
 import br.ufrpe.poo.banco.exceptions.ContaJaAdicionadaException;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
@@ -83,11 +84,22 @@ public interface IGerencia {
 	 * Atualiza os dados cadastrais de um cliente.
 	 * 
 	 * @param cliente
-	 *            Cliente com os dados atualiados.
+	 *            Cliente com os dados atualizados.
 	 * @throws RepositorioException
 	 *             Lancada quando ocorre erro na persistencia de clientes.
 	 */
 	void atualizarCadastroCliente(Cliente cliente) throws RepositorioException;
+
+	/**
+	 * Atualiza os dados cadastrais de uma conta.
+	 * 
+	 * @param conta
+	 *            Conta com os dados atualizados.
+	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro na persistencia de contas.
+	 */
+	void atualizarCadastroConta(ContaAbstrata conta)
+			throws RepositorioException;
 
 	/**
 	 * Remove cliente do repositorio.

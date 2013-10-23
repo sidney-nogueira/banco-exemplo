@@ -14,8 +14,8 @@ import br.ufrpe.poo.banco.iterator.IteratorCliente;
 import br.ufrpe.poo.banco.negocio.Cliente;
 
 /**
- * Implementacao de repositorio de clientes que persiste os objetos das contas
- * em arquivo.
+ * Implementacao de repositorio de clientes que persiste os objetos das contas em
+ * arquivo.
  * 
  * @author
  * 

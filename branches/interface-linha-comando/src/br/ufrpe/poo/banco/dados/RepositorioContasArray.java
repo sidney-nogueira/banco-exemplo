@@ -28,24 +28,6 @@ public class RepositorioContasArray implements IRepositorioContas {
 		indice = 0;
 	}
 
-	@Override
-	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
-		if (this.existe(conta.getNumero())) {
-			return false;
-		}
-		// se array chegou na capacidade
-		if (contas.length == indice) {
-			ContaAbstrata[] aux = new ContaAbstrata[contas.length * 2];
-			for (int i = 0; i < indice; i++) {
-				aux[i] = contas[i];
-			}
-			this.contas = aux;
-		}
-		contas[indice] = conta;
-		indice = indice + 1;
-		return true;
-	}
-
 	/**
 	 * Retorna o indice da conta no array.
 	 * 
@@ -70,6 +52,23 @@ public class RepositorioContasArray implements IRepositorioContas {
 	}
 
 	@Override
+	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
+		if (this.existe(conta.getNumero())) {
+			return false;
+		}
+		if (contas.length == indice) {
+			ContaAbstrata[] aux = new ContaAbstrata[contas.length * 2];
+			for (int i = 0; i < indice; i++) {
+				aux[i] = contas[i];
+			}
+			this.contas = aux;
+		}
+		contas[indice] = conta;
+		indice = indice + 1;
+		return true;
+	}
+
+	@Override
 	public ContaAbstrata procurar(String numero) throws RepositorioException {
 		ContaAbstrata resposta = null;
 		int i = this.getIndice(numero);
@@ -83,12 +82,9 @@ public class RepositorioContasArray implements IRepositorioContas {
 	public boolean remover(String numero) throws RepositorioException {
 		boolean sucesso = false;
 		int i = this.getIndice(numero);
-		if (i < this.indice) {// valida indice
-			// decrementa proximo indice livre
+		if (i < this.indice) {
 			this.indice = this.indice - 1;
-			// copia ultimo para removido
 			this.contas[i] = this.contas[this.indice];
-			// ultimo aponta para null
 			this.contas[this.indice] = null;
 		}
 		return sucesso;
@@ -111,7 +107,7 @@ public class RepositorioContasArray implements IRepositorioContas {
 	}
 
 	@Override
-	public IteratorContaAbstrata getIterator() throws RepositorioException{
+	public IteratorContaAbstrata getIterator() throws RepositorioException {
 		return new IteratorContaAbstrataArray(this.contas);
 	}
 }
