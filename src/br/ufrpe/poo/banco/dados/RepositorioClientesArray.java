@@ -5,17 +5,45 @@ import br.ufrpe.poo.banco.iterator.IteratorCliente;
 import br.ufrpe.poo.banco.iterator.IteratorClienteArray;
 import br.ufrpe.poo.banco.negocio.Cliente;
 
+/**
+ * Implementacao do repositorio de clientes que persiste os objetos dos clientes
+ * em array.
+ * 
+ * Tamanho do array cresce sobre demanda.
+ * 
+ * @author
+ * 
+ */
 public class RepositorioClientesArray implements IRepositorioClientes {
 
+	/**
+	 * Array que mantem os clientes.
+	 */
 	private Cliente[] clientes;
 
+	/**
+	 * Proxima posicao livre do array.
+	 */
 	private int indice;
 
+	/**
+	 * Constroi um repositorio com array.
+	 * 
+	 * Tamanho inicial sao 100 posicoes.
+	 */
 	public RepositorioClientesArray() {
 		this.clientes = new Cliente[100];
 		this.indice = 0;
 	}
 
+	/**
+	 * Retorna o indice do cliente no array.
+	 * 
+	 * @param cpf
+	 *            Numero do cpf cujo indice eh retornado.
+	 * @return indice do cliente no array. Igual a this.indice caso a conta nao
+	 *         exista.
+	 */
 	private int getIndice(String cpf) {
 		String n;
 		boolean achou = false;
@@ -88,7 +116,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public IteratorCliente getIterator() throws RepositorioException{
+	public IteratorCliente getIterator() throws RepositorioException {
 		return new IteratorClienteArray(this.clientes);
 	}
 

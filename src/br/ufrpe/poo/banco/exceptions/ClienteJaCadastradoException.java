@@ -1,4 +1,4 @@
-package br.ufrpe.poo.banco.negocio;
+package br.ufrpe.poo.banco.exceptions;
 
 /**
  * Excessao que representa um erro ao inseir um cliente no repositorio.
