@@ -23,7 +23,11 @@ public abstract class ContaAbstrata implements Serializable {
 	 * Valor do saldo da conta bancaria.
 	 */
 	protected double saldo;
-
+	
+	public ContaAbstrata(){
+		
+	}
+	
 	public ContaAbstrata(String numero, double valor) {
 		this.numero = numero;
 		this.saldo = valor;

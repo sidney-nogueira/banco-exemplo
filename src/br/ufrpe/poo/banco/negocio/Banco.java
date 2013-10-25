@@ -5,14 +5,8 @@ import br.ufrpe.poo.banco.dados.IRepositorioContas;
 import br.ufrpe.poo.banco.dados.RepositorioClientesArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.exceptions.ClienteJaCadastradoException;
-import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
-import br.ufrpe.poo.banco.exceptions.ContaJaAdicionadaException;
-import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
-import br.ufrpe.poo.banco.exceptions.ContaNaoAssociadaAoClienteException;
-import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
-import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
 
 /**
  * Implementacao do sistema bancario que faz a comunicacao com a persistencia e
@@ -85,134 +79,15 @@ public class Banco implements IGerencia, ICliente {
 	}
 
 	@Override
-	public void cadastrarCliente(Cliente cliente)
-			throws ClienteJaCadastradoException, RepositorioException {
+	public void cadastrarCliente(Cliente cliente) throws RepositorioException,
+			ClienteJaCadastradoException {
 		if (!this.clientes.inserir(cliente))
 			throw new ClienteJaCadastradoException();
 	}
 
 	@Override
-	public void cadastrarConta(ContaAbstrata conta)
-			throws ContaJaCadastradaException, RepositorioException {
-		if (!this.contas.inserir(conta))
-			throw new ContaJaCadastradaException();
-	}
-
-	@Override
-	public void associarContaAoCliente(String numero, Cliente cliente)
-			throws ContaJaAdicionadaException, RepositorioException {
-		if (!cliente.adicionarConta(numero))
-			throw new ContaJaAdicionadaException();
-		this.atualizarCadastroCliente(cliente);
-	}
-
-	@Override
-	public Cliente procurarCliente(String cpf) throws RepositorioException {
-		return this.clientes.procurar(cpf);
-	}
-
-	@Override
-	public ContaAbstrata procurarConta(String numero)
-			throws RepositorioException {
-		return this.contas.procurar(numero);
-	}
-
-	@Override
-	public void atualizarCadastroCliente(Cliente cliente)
-			throws RepositorioException {
-		this.clientes.atualizar(cliente);
-	}
-
-	@Override
-	public void atualizarCadastroConta(ContaAbstrata conta)
-			throws RepositorioException {
-		this.contas.atualizar(conta);
-	}
-
-	@Override
-	public void removerCadastroCliente(String cpf)
-			throws ClienteNaoCadastradoException, RepositorioException {
-		if (!this.clientes.remover(cpf))
-			throw new ClienteNaoCadastradoException();
-	}
-
-	@Override
-	public void removerCadastroConta(String numero)
-			throws ContaNaoEncontradaException, RepositorioException {
-		if (!this.contas.remover(numero))
-			throw new ContaNaoEncontradaException();
-	}
-
-	@Override
-	public void creditar(String numero, double valor, Cliente cliente)
-			throws RepositorioException, ContaNaoAssociadaAoClienteException,
-			ContaNaoEncontradaException {
-		ContaAbstrata conta = this.procurarConta(numero);
-		if (conta != null) {
-			if (cliente.existeConta(numero) != -1) {
-				if (conta instanceof Poupanca) {
-					Poupanca poupanca = (Poupanca) conta;
-					poupanca.creditar(valor);
-				} else if (conta instanceof Conta) {
-					Conta c = (Conta) conta;
-					c.creditar(valor);
-				} else if (conta instanceof ContaEspecial) {
-					ContaEspecial ce = (ContaEspecial) conta;
-					ce.creditar(valor);
-				} else {
-					ContaImposto ci = (ContaImposto) conta;
-					ci.creditar(valor);
-				}
-				this.atualizarCadastroCliente(cliente);
-				this.atualizarCadastroConta(conta);
-			} else
-				throw new ContaNaoAssociadaAoClienteException();
-		} else
-			throw new ContaNaoEncontradaException();
-	}
-
-	@Override
-	public void debitar(String numero, double valor, Cliente cliente)
-			throws RepositorioException, ContaNaoAssociadaAoClienteException,
-			ContaNaoEncontradaException, SaldoInsuficienteException {
-		ContaAbstrata conta = this.procurarConta(numero);
-		if (conta != null) {
-			if (cliente.existeConta(numero) != -1) {
-				if (conta instanceof Poupanca) {
-					Poupanca poupanca = (Poupanca) conta;
-					poupanca.debitar(valor);
-				} else if (conta instanceof Conta) {
-					Conta c = (Conta) conta;
-					c.debitar(valor);
-				} else if (conta instanceof ContaEspecial) {
-					ContaEspecial ce = (ContaEspecial) conta;
-					ce.debitar(valor);
-				} else {
-					ContaImposto ci = (ContaImposto) conta;
-					ci.debitar(valor);
-				}
-				this.atualizarCadastroCliente(cliente);
-				this.atualizarCadastroConta(conta);
-			} else
-				throw new ContaNaoAssociadaAoClienteException();
-		} else
-			throw new ContaNaoEncontradaException();
-	}
-
-	@Override
-	public double getSaldo(String numero) throws RepositorioException,
-			ContaNaoEncontradaException {
-		ContaAbstrata conta = this.procurarConta(numero);
-		if (conta == null)
-			throw new ContaNaoEncontradaException();
-		return conta.getSaldo();
-
-	}
-
-	@Override
-	public void transferir(String de, String para, double valor) {
-		
-		
+	public Cliente procurarCliente(String cpf) {
+		return this.procurarCliente(cpf);
 	}
 
 }

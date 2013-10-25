@@ -16,7 +16,11 @@ public class ContaImposto extends ContaAbstrata {
 	 * Valor do CPMF.
 	 */
 	public static final double CPMF = 0.0038;
-
+	
+	public ContaImposto(){
+		
+	}
+	
 	public ContaImposto(String numero, double valor) {
 		super(numero, valor);
 	}
