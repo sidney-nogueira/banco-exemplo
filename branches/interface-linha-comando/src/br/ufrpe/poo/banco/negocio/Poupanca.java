@@ -11,7 +11,11 @@ import java.io.Serializable;
 public class Poupanca extends Conta implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	public Poupanca(){
+		
+	}
+	
 	public Poupanca(String numero, double valor) {
 		super(numero, valor);
 	}

@@ -11,7 +11,11 @@ import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
 public class Conta extends ContaAbstrata {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	public Conta(){
+		super();
+	}
+	
 	public Conta(String numero, double valor) {
 		super(numero, valor);
 	}
