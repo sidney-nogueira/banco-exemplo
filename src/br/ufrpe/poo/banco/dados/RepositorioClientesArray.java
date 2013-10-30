@@ -78,7 +78,7 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public Cliente procurar(String cpf) throws RepositorioException {
+	public Cliente procurar(String cpf) {
 		Cliente cliente = null;
 		int i = this.getIndice(cpf);
 		if (i < this.indice) {
@@ -110,13 +110,13 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 	}
 
 	@Override
-	public boolean existe(String cpf) throws RepositorioException {
+	public boolean existe(String cpf) {
 		int i = this.getIndice(cpf);
 		return (i != this.indice);
 	}
 
 	@Override
-	public IteratorCliente getIterator() throws RepositorioException {
+	public IteratorCliente getIterator() {
 		return new IteratorClienteArray(this.clientes);
 	}
 

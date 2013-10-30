@@ -5,6 +5,7 @@ import br.ufrpe.poo.banco.dados.IRepositorioContas;
 import br.ufrpe.poo.banco.dados.RepositorioClientesArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.exceptions.ClienteJaCadastradoException;
+import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
 
@@ -28,19 +29,16 @@ public class Banco implements IGerencia, ICliente {
 	private IRepositorioContas contas;
 
 	/**
-	 * Instancia da interface do gerenciador do banco.
-	 */
-	private static IGerencia gerenciaInstance;
-
-	/**
-	 * Instancia da interface do cliente do banco.
-	 */
-	private static ICliente clienteInstance;
-
-	/**
 	 * Instancia do comunicador.
 	 */
 	private static Banco instance;
+
+	public Banco(IRepositorioClientes repositorioClientesArquivoBin,
+			IRepositorioContas repositorioContasArquivoBin) {
+		this.clientes = repositorioClientesArquivoBin;
+		this.contas = repositorioContasArquivoBin;
+	}
+
 
 	/**
 	 * Retorna a instancia unica do banco.
@@ -55,12 +53,9 @@ public class Banco implements IGerencia, ICliente {
 	public static Banco getInstance() throws RepositorioException,
 			InicializacaoSistemaException {
 
-		if (Banco.clienteInstance == null && Banco.gerenciaInstance == null) {
+		if (Banco.instance == null) {
 			try {
-				Banco.clienteInstance = new Banco(
-						new RepositorioClientesArquivoBin());
-				Banco.gerenciaInstance = new Banco(
-						new RepositorioContasArquivoBin());
+				Banco.instance = new Banco(new RepositorioClientesArquivoBin(), new RepositorioContasArquivoBin());
 			} catch (RepositorioException e) {
 				throw new InicializacaoSistemaException();
 			}
@@ -68,15 +63,6 @@ public class Banco implements IGerencia, ICliente {
 		return Banco.instance;
 	}
 
-	public Banco(IRepositorioClientes repClientes) {
-
-		this.clientes = repClientes;
-	}
-
-	public Banco(IRepositorioContas repContas) {
-
-		this.contas = repContas;
-	}
 
 	@Override
 	public void cadastrarCliente(Cliente cliente) throws RepositorioException,
@@ -87,7 +73,19 @@ public class Banco implements IGerencia, ICliente {
 
 	@Override
 	public Cliente procurarCliente(String cpf) {
-		return this.procurarCliente(cpf);
+		return this.clientes.procurar(cpf);
+	}
+
+	@Override
+	public void cadastrarConta(ContaAbstrata conta) throws RepositorioException, ContaJaCadastradaException {
+		if(!this.contas.inserir(conta))
+			throw new ContaJaCadastradaException();
+		
+	}
+
+	@Override
+	public ContaAbstrata procurarConta(String numero) {
+		return this.contas.procurar(numero);
 	}
 
 }

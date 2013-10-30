@@ -32,7 +32,7 @@ public interface IRepositorioContas {
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
 	 */
-	ContaAbstrata procurar(String numero) throws RepositorioException;
+	ContaAbstrata procurar(String numero);
 
 	/**
 	 * Remove uma conta do repositorio.
@@ -67,7 +67,7 @@ public interface IRepositorioContas {
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
 	 */
-	boolean existe(String numero) throws RepositorioException;
+	boolean existe(String numero);
 
 	/**
 	 * Retorna um iterador para acessar sequencialmente as contas do
@@ -77,5 +77,5 @@ public interface IRepositorioContas {
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
 	 */
-	IteratorContaAbstrata getIterator() throws RepositorioException;
+	IteratorContaAbstrata getIterator();
 }

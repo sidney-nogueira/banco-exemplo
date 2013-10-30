@@ -26,7 +26,7 @@ public class Cliente implements Serializable {
 	/**
 	 * Array de numero de contas a qual o cliente possui.
 	 */
-	protected ArrayList<String> contas;
+	protected ArrayList<String> contas = new ArrayList<String>();
 
 	public Cliente(String nome, String cpf, ArrayList<String> contas) {
 		this.nome = nome;

@@ -124,7 +124,7 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	}
 
 	@Override
-	public ContaAbstrata procurar(String numero) throws RepositorioException {
+	public ContaAbstrata procurar(String numero) {
 		return contas.procurar(numero);
 	}
 
@@ -147,11 +147,11 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	}
 
 	@Override
-	public boolean existe(String numero) throws RepositorioException {
+	public boolean existe(String numero) {
 		return contas.existe(numero);
 	}
 
-	public IteratorContaAbstrata getIterator() throws RepositorioException {
+	public IteratorContaAbstrata getIterator() {
 		return contas.getIterator();
 	}
 }

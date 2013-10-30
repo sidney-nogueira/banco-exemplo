@@ -33,14 +33,6 @@ public abstract class ContaAbstrata implements Serializable {
 		this.saldo = valor;
 	}
 
-	public String getNumero() {
-		return this.numero;
-	}
-
-	public double getSaldo() {
-		return this.saldo;
-	}
-
 	/**
 	 * Credita um valor a conta bancaria.
 	 * 
@@ -65,6 +57,18 @@ public abstract class ContaAbstrata implements Serializable {
 
 	public void setSaldo(double saldo) {
 		this.saldo = saldo;
+	}
+	
+	public void setNumero(String numero){
+		this.numero = numero;
+	}
+	
+	public String getNumero() {
+		return this.numero;
+	}
+
+	public double getSaldo() {
+		return this.saldo;
 	}
 
 }

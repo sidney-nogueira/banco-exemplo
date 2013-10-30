@@ -132,7 +132,7 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 	}
 
 	@Override
-	public Cliente procurar(String cpf) throws RepositorioException {
+	public Cliente procurar(String cpf) {
 		return this.clientes.procurar(cpf);
 	}
 
@@ -155,12 +155,12 @@ public class RepositorioClientesArquivoBin implements IRepositorioClientes {
 	}
 
 	@Override
-	public boolean existe(String cpf) throws RepositorioException {
+	public boolean existe(String cpf) {
 		return this.clientes.existe(cpf);
 	}
 
 	@Override
-	public IteratorCliente getIterator() throws RepositorioException {
+	public IteratorCliente getIterator() {
 		return this.clientes.getIterator();
 	}
 
