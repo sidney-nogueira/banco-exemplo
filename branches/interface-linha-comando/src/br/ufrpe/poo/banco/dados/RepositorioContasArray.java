@@ -69,7 +69,7 @@ public class RepositorioContasArray implements IRepositorioContas {
 	}
 
 	@Override
-	public ContaAbstrata procurar(String numero) throws RepositorioException {
+	public ContaAbstrata procurar(String numero) {
 		ContaAbstrata resposta = null;
 		int i = this.getIndice(numero);
 		if (i < this.indice) {
@@ -101,13 +101,13 @@ public class RepositorioContasArray implements IRepositorioContas {
 	}
 
 	@Override
-	public boolean existe(String numero) throws RepositorioException {
+	public boolean existe(String numero) {
 		int i = this.getIndice(numero);
 		return (i != this.indice);
 	}
 
 	@Override
-	public IteratorContaAbstrata getIterator() throws RepositorioException {
+	public IteratorContaAbstrata getIterator() {
 		return new IteratorContaAbstrataArray(this.contas);
 	}
 }

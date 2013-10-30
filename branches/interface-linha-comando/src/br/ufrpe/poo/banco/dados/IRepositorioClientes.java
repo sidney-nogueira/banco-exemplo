@@ -36,7 +36,7 @@ public interface IRepositorioClientes {
 	 * @throws RepositorioException
 	 *             Lancada quando ocorre erro no repositorio.
 	 */
-	Cliente procurar(String cpf) throws RepositorioException;
+	Cliente procurar(String cpf);
 
 	/**
 	 * Remove um cliente do repositorio.
@@ -71,7 +71,7 @@ public interface IRepositorioClientes {
 	 * @throws RepositorioException
 	 *             Lancada quando ocorre erro no repositorio.
 	 */
-	boolean existe(String cpf) throws RepositorioException;
+	boolean existe(String cpf);
 
 	/**
 	 * Retorna um iterador para acessar sequencialmente os clientes do
@@ -81,6 +81,6 @@ public interface IRepositorioClientes {
 	 * @throws RepositorioException
 	 *             Lancada quando ocorre erro no repositorio.
 	 */
-	IteratorCliente getIterator() throws RepositorioException;
+	IteratorCliente getIterator();
 
 }
