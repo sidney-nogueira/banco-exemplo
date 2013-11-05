@@ -28,13 +28,4 @@ public class Conta extends ContaAbstrata {
 		this.setSaldo(this.getSaldo() - valor);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Conta) {
-			Conta c = (Conta) obj;
-			return c.getNumero().equals(this.getNumero());
-		}
-		return false;
-	}
-
 }

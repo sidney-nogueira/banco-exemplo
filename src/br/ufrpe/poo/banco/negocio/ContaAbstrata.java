@@ -70,5 +70,13 @@ public abstract class ContaAbstrata implements Serializable {
 	public double getSaldo() {
 		return this.saldo;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Conta) {
+			Conta c = (Conta) obj;
+			return c.getNumero().equals(this.getNumero());
+		}
+		return false;
+	}
 }
