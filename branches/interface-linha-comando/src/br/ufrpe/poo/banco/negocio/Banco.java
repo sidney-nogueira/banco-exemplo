@@ -5,6 +5,9 @@ import br.ufrpe.poo.banco.dados.IRepositorioContas;
 import br.ufrpe.poo.banco.dados.RepositorioClientesArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.exceptions.ClienteJaCadastradoException;
+import br.ufrpe.poo.banco.exceptions.ClienteJaPossuiContaException;
+import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
+import br.ufrpe.poo.banco.exceptions.ContaJaAssociadaException;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
@@ -86,6 +89,22 @@ public class Banco implements IGerencia, ICliente {
 	@Override
 	public ContaAbstrata procurarConta(String numero) {
 		return this.contas.procurar(numero);
+	}
+
+
+	@Override
+	public void associarConta(String cpf, String numeroConta)
+			throws ClienteJaPossuiContaException, ContaJaAssociadaException, ClienteNaoCadastradoException {
+		Cliente cliente = this.procurarCliente(cpf);
+		if(cliente != null){
+			System.out.println(cliente.getContas());
+			ContaAbstrata conta = procurarConta(numeroConta);
+			if(conta == null)
+				cliente.adicionarConta(numeroConta);
+			else
+				throw new ContaJaAssociadaException();
+		}else
+			throw new ClienteNaoCadastradoException();
 	}
 
 }

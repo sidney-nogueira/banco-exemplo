@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -17,34 +16,32 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import br.ufrpe.poo.banco.exceptions.CampoVazioException;
-import br.ufrpe.poo.banco.exceptions.ClienteJaCadastradoException;
+import br.ufrpe.poo.banco.exceptions.ClienteJaPossuiContaException;
+import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
+import br.ufrpe.poo.banco.exceptions.ContaJaAssociadaException;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
-import br.ufrpe.poo.banco.negocio.Cliente;
 import br.ufrpe.poo.banco.negocio.Conta;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 import br.ufrpe.poo.banco.negocio.ContaEspecial;
 import br.ufrpe.poo.banco.negocio.ContaImposto;
 import br.ufrpe.poo.banco.negocio.Poupanca;
 
-public class CadastroFrame extends JFrame {
+public class AssociarContaFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static CadastroFrame instance;
-
+	private static AssociarContaFrame instance;
 	private JPanel panel;
 
-	private JTextField cpfTextField;
-	private JLabel cpfLabel;
-	private JTextField nomeTextField;
-	private JLabel nomeLabel;
-	private JTextField contaTextField;
-	private JLabel contaLabel;
+	private JLabel cpfClienteLabel;
+	private JLabel numeroContaClienteLabel;
 
-	private JButton submeterCadastroButton;
+	private JTextField cpfClienteTextField;
+	private JTextField numeroContaTextField;
+
+	private JButton associarContaButton;
 	private JButton cancelarButton;
-	private JButton apagarCamposButton;
 
 	private ButtonGroup contasButtonGroup;
 	private JRadioButton tipoContaRadioButton;
@@ -55,39 +52,37 @@ public class CadastroFrame extends JFrame {
 
 	private ContaAbstrata tipoConta;
 
-	public static CadastroFrame getInstance() {
-		if (instance == null) {
-			CadastroFrame.instance = new CadastroFrame();
+	public static AssociarContaFrame getInstance() {
+		if (AssociarContaFrame.instance == null) {
+			AssociarContaFrame.instance = new AssociarContaFrame();
 		}
-		return CadastroFrame.instance;
+		return AssociarContaFrame.instance;
 	}
 
-	public CadastroFrame() {
+	public AssociarContaFrame() {
 		super();
-		initialize();
+		initialiaze();
 	}
 
-	private void initialize() {
-		this.setTitle("Cadastrar"); // título
+	private void initialiaze() {
+		this.setTitle("Associar Conta"); // título
 		this.setResizable(false); // botão maximizar desativado
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setBounds(0, 0, 350, 300);
 		this.setLocationRelativeTo(null); // centraliza na tela
 		this.setContentPane(getPanel());
+
 	}
 
 	private JPanel getPanel() {
 		if (this.panel == null) {
 			this.panel = new JPanel();
 			this.panel.setLayout(null);
-			this.panel.add(getCpfLabel());
-			this.panel.add(getCpfTextField());
-			this.panel.add(getNomeLabel());
-			this.panel.add(getNomeTextField());
-			this.panel.add(getContaLabel());
-			this.panel.add(getContaTextField());
-			this.panel.add(getSubmeterCadastroButton());
-			this.panel.add(getApagarCamposButton());
+			this.panel.add(getCpfClienteLabel());
+			this.panel.add(getCpfClienteTextField());
+			this.panel.add(getNumeroContaClienteLabel());
+			this.panel.add(getNumeroContaTextField());
+			this.panel.add(getAssociarContaButton());
 			this.panel.add(getCancelarButton());
 			this.getContasButtonGroup();
 			this.panel.add(getTipoContaRadioButton());
@@ -99,132 +94,96 @@ public class CadastroFrame extends JFrame {
 		return this.panel;
 	}
 
-	public JTextField getCpfTextField() {
-		if (this.cpfTextField == null) {
-			this.cpfTextField = new JTextField();
-			this.cpfTextField.setColumns(10);
-			this.cpfTextField.setBounds(130, 20, 100, 20);
+	public JLabel getCpfClienteLabel() {
+		if (this.cpfClienteLabel == null) {
+			this.cpfClienteLabel = new JLabel("CPF: ");
+			this.cpfClienteLabel.setBounds(20, 20, 30, 20);
 		}
-		return cpfTextField;
+		return cpfClienteLabel;
 	}
 
-	public JLabel getCpfLabel() {
-		if (this.cpfLabel == null) {
-			this.cpfLabel = new JLabel("CPF: ");
-			this.cpfLabel.setBounds(20, 20, 30, 20);
+	public JLabel getNumeroContaClienteLabel() {
+		if (this.numeroContaClienteLabel == null) {
+			this.numeroContaClienteLabel = new JLabel("Nova Conta: ");
+			this.numeroContaClienteLabel.setBounds(20, 55, 100, 20);
 		}
-		return cpfLabel;
+		return numeroContaClienteLabel;
 	}
 
-	public JTextField getNomeTextField() {
-		if (this.nomeTextField == null) {
-			this.nomeTextField = new JTextField();
-			this.nomeTextField.setColumns(10);
-			this.nomeTextField.setBounds(130, 55, 130, 20);
+	public JTextField getCpfClienteTextField() {
+		if (this.cpfClienteTextField == null) {
+			this.cpfClienteTextField = new JTextField();
+			this.cpfClienteTextField.setColumns(10);
+			this.cpfClienteTextField.setBounds(100, 20, 100, 20);
 		}
-		return nomeTextField;
+		return cpfClienteTextField;
 	}
 
-	public JLabel getNomeLabel() {
-		if (this.nomeLabel == null) {
-			this.nomeLabel = new JLabel("Nome: ");
-			this.nomeLabel.setBounds(20, 55, 50, 20);
+	public JTextField getNumeroContaTextField() {
+		if (this.numeroContaTextField == null) {
+			this.numeroContaTextField = new JTextField();
+			this.numeroContaTextField.setColumns(10);
+			this.numeroContaTextField.setBounds(100, 55, 100, 20);
 		}
-		return nomeLabel;
+		return numeroContaTextField;
 	}
 
-	public JTextField getContaTextField() {
-		if (this.contaTextField == null) {
-			this.contaTextField = new JTextField();
-			this.contaTextField.setColumns(10);
-			this.contaTextField.setBounds(130, 90, 100, 20);
-		}
-		return contaTextField;
-	}
-
-	public JLabel getContaLabel() {
-		if (this.contaLabel == null) {
-			this.contaLabel = new JLabel("Número da conta: ");
-			this.contaLabel.setBounds(20, 90, 120, 20);
-		}
-		return contaLabel;
-	}
-
-	public JButton getSubmeterCadastroButton() {
-		if (this.submeterCadastroButton == null) {
-			this.submeterCadastroButton = new JButton("Cadastrar");
-			this.submeterCadastroButton.setBounds(10, 200, 100, 40);
-			this.submeterCadastroButton.addActionListener(new ActionListener() {
+	public JButton getAssociarContaButton() {
+		if (this.associarContaButton == null) {
+			this.associarContaButton = new JButton();
+			this.associarContaButton.setText("Associar");
+			this.associarContaButton.setBounds(60, 200, 100, 40);
+			this.associarContaButton.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						String cpf = getCpfTextField().getText();
-						verificarCampoVazio(cpf, "CPF");
-						String nome = getNomeTextField().getText();
-						verificarCampoVazio(nome, "Nome");
-						String numeroConta = getContaTextField().getText();
-						verificarCampoVazio(numeroConta, "Número da Conta");
+						String cpf = getCpfClienteTextField().getText();
+						if (cpf.equals(""))
+							throw new CampoVazioException("CPF");
 
-						if (GerenciaMenuFrame.getBanco().procurarCliente(cpf) != null)
-							throw new ClienteJaCadastradoException();
-						if (GerenciaMenuFrame.getBanco().procurarConta(
-								numeroConta) != null)
-							throw new ContaJaCadastradaException();
+						String numeroConta = getNumeroContaTextField()
+								.getText();
+						if (numeroConta.equals(""))
+							throw new CampoVazioException("número da conta");
+
+						GerenciaMenuFrame.getBanco().associarConta(cpf,
+								numeroConta);
 
 						tipoConta.setNumero(numeroConta);
 						tipoConta.setSaldo(0);
-						ArrayList<String> contas = new ArrayList<String>();
-						contas.add(numeroConta);
-						Cliente cliente = new Cliente(nome, cpf, contas);
+
 						GerenciaMenuFrame.getBanco().cadastrarConta(tipoConta);
-						GerenciaMenuFrame.getBanco().cadastrarCliente(cliente);
-						JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
+
+						JOptionPane.showMessageDialog(null,
+								"Conta associada ao cliente com sucesso!");
 						esvaziarCampos();
-						
-					} catch (CampoVazioException | ClienteJaCadastradoException
-							| ContaJaCadastradaException | RepositorioException e) {
+					} catch (CampoVazioException
+							| ClienteNaoCadastradoException
+							| ClienteJaPossuiContaException
+							| ContaJaAssociadaException | RepositorioException
+							| ContaJaCadastradaException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
+						esvaziarCampos();
 					}
 
 				}
 			});
 		}
-		return submeterCadastroButton;
-	}
-
-	protected void verificarCampoVazio(String cpf, String valor)
-			throws CampoVazioException {
-		if (cpf.equals(""))
-			throw new CampoVazioException(valor);
-
-	}
-
-	public JButton getApagarCamposButton() {
-		if (this.apagarCamposButton == null) {
-			this.apagarCamposButton = new JButton("Desfazer");
-			this.apagarCamposButton.setBounds(122, 200, 100, 40);
-			this.apagarCamposButton.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					esvaziarCampos();					
-				}
-			});
-		}
-		return apagarCamposButton;
+		return associarContaButton;
 	}
 
 	public JButton getCancelarButton() {
 		if (this.cancelarButton == null) {
 			this.cancelarButton = new JButton("Cancelar");
-			this.cancelarButton.setBounds(235, 200, 100, 40);
+			this.cancelarButton.setBounds(180, 200, 100, 40);
 			this.cancelarButton.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					setVisible(false);			
+					esvaziarCampos();
+					setVisible(false);
 				}
 			});
 		}
@@ -303,22 +262,20 @@ public class CadastroFrame extends JFrame {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			if (conta instanceof Conta){
-				if(conta instanceof Poupanca)
+			if (conta instanceof Conta) {
+				if (conta instanceof Poupanca)
 					tipoConta = new Poupanca();
-				else if(conta instanceof ContaEspecial)
+				else if (conta instanceof ContaEspecial)
 					tipoConta = new ContaEspecial();
 				else
 					tipoConta = new Conta();
-			}else
+			} else
 				tipoConta = new ContaImposto();
 		}
 	}
-	
-	private void esvaziarCampos(){
-		this.getNomeTextField().setText("");
-		this.getCpfTextField().setText("");
-		this.getContaTextField().setText("");
-	}
 
+	private void esvaziarCampos() {
+		getCpfClienteTextField().setText("");
+		getNumeroContaTextField().setText("");
+	}
 }

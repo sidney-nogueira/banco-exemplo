@@ -3,6 +3,9 @@ package br.ufrpe.poo.banco.negocio;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import br.ufrpe.poo.banco.exceptions.ClienteJaPossuiContaException;
+import br.ufrpe.poo.banco.exceptions.ClienteNaoPossuiContaException;
+
 /**
  * Classe que representa o tipo Cliente.
  * 
@@ -34,47 +37,26 @@ public class Cliente implements Serializable {
 		this.contas = contas;
 	}
 
-	/**
-	 * Aloca um numero de uma conta ao array de contas.
-	 * 
-	 * @param numero
-	 *            Numero da conta a ser alocado.
-	 * @return se conta foi alocada. Se ja existe o numero eh retornado
-	 *         <code>false</code>.
-	 */
-	public boolean adicionarConta(String numero) {
-		if (this.existeConta(numero) != -1)
-			return false;
-		return this.contas.add(numero);
+	public void adicionarConta(String numeroConta)
+			throws ClienteJaPossuiContaException {
+		if (procurarConta(numeroConta) != -1)
+			throw new ClienteJaPossuiContaException();
+		this.contas.add(numeroConta);
+
 	}
 
-	/**
-	 * Remove um numero de conta do array de contas.
-	 * 
-	 * @param numero
-	 *            Numero da conta a ser removido.
-	 * @return se conta foi removida. Se nao existe o numero eh retornado
-	 *         <code>false</code>.
-	 */
-	public boolean removerConta(String numero) {
-		int index = this.existeConta(numero);
+	public void removerConta(String numeroConta)
+			throws ClienteNaoPossuiContaException {
+		int index = procurarConta(numeroConta);
 		if (index == -1)
-			return false;
+			throw new ClienteNaoPossuiContaException();
 		this.contas.remove(index);
-		return true;
 	}
 
-	/**
-	 * Indica a existencia de um numero de conta no array.
-	 * 
-	 * @param numero
-	 *            Numero de conta a ser procurado.
-	 * @return se existe numero da conta. Se nao existe eh retornado -1.
-	 */
-	public int existeConta(String numero) {
-		return this.contas.indexOf(numero);
+	private int procurarConta(String numeroConta) {
+		return this.contas.indexOf(numeroConta);
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
