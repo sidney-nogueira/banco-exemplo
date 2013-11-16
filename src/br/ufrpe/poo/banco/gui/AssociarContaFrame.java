@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -31,32 +33,27 @@ public class AssociarContaFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static AssociarContaFrame instance;
-	private JPanel panel;
-
+	private static AssociarContaFrame instanceAssociarContaFrame;
+	private JPanel panelAssociarConta;
 	private JLabel cpfClienteLabel;
 	private JLabel numeroContaClienteLabel;
-
 	private JTextField cpfClienteTextField;
 	private JTextField numeroContaTextField;
-
 	private JButton associarContaButton;
 	private JButton cancelarButton;
-
-	private ButtonGroup contasButtonGroup;
+	private ButtonGroup tipoCorrenteButtonGroup;
 	private JRadioButton tipoContaRadioButton;
 	private JRadioButton tipoPoupancaRadioButton;
 	private JRadioButton tipoEspecialRadioButton;
 	private JRadioButton tipoImpostoRadioButton;
-	private JLabel contasLabel;
+	private JLabel tipoContasLabel;
+	private ContaAbstrata tipoConta = new Conta("", 0);
 
-	private ContaAbstrata tipoConta;
-
-	public static AssociarContaFrame getInstance() {
-		if (AssociarContaFrame.instance == null) {
-			AssociarContaFrame.instance = new AssociarContaFrame();
+	public static AssociarContaFrame getInstanceAssociarContaFrame() {
+		if (AssociarContaFrame.instanceAssociarContaFrame == null) {
+			AssociarContaFrame.instanceAssociarContaFrame = new AssociarContaFrame();
 		}
-		return AssociarContaFrame.instance;
+		return AssociarContaFrame.instanceAssociarContaFrame;
 	}
 
 	public AssociarContaFrame() {
@@ -65,74 +62,104 @@ public class AssociarContaFrame extends JFrame {
 	}
 
 	private void initialiaze() {
-		this.setTitle("Associar Conta"); // título
-		this.setResizable(false); // botão maximizar desativado
+		this.setTitle("Associar Conta");
+		this.setResizable(false);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setBounds(0, 0, 350, 300);
-		this.setLocationRelativeTo(null); // centraliza na tela
-		this.setContentPane(getPanel());
+		this.setBounds(0, 0, 400, 300);
+		this.setLocationRelativeTo(null);
+		this.setContentPane(getPanelAssociarConta());
+		this.addWindowListener(new WindowListener() {
 
+			@Override
+			public void windowOpened(WindowEvent e) {
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				esvaziarCampos();
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
 	}
 
-	private JPanel getPanel() {
-		if (this.panel == null) {
-			this.panel = new JPanel();
-			this.panel.setLayout(null);
-			this.panel.add(getCpfClienteLabel());
-			this.panel.add(getCpfClienteTextField());
-			this.panel.add(getNumeroContaClienteLabel());
-			this.panel.add(getNumeroContaTextField());
-			this.panel.add(getAssociarContaButton());
-			this.panel.add(getCancelarButton());
-			this.getContasButtonGroup();
-			this.panel.add(getTipoContaRadioButton());
-			this.panel.add(getTipoPoupancaRadioButton());
-			this.panel.add(getTipoEspecialRadioButton());
-			this.panel.add(getTipoImpostoRadioButton());
-			this.panel.add(getContasLabel());
+	private JPanel getPanelAssociarConta() {
+		if (this.panelAssociarConta == null) {
+			this.panelAssociarConta = new JPanel();
+			this.panelAssociarConta.setLayout(null);
+			this.panelAssociarConta.add(getCpfClienteLabel());
+			this.panelAssociarConta.add(getCpfClienteTextField());
+			this.panelAssociarConta.add(getNumeroContaClienteLabel());
+			this.panelAssociarConta.add(getNumeroContaTextField());
+			this.panelAssociarConta.add(getAssociarContaButton());
+			this.panelAssociarConta.add(getCancelarButton());
+			this.getTipoContaButtonGroup();
+			this.panelAssociarConta.add(getTipoCorrenteRadioButton());
+			this.panelAssociarConta.add(getTipoPoupancaRadioButton());
+			this.panelAssociarConta.add(getTipoEspecialRadioButton());
+			this.panelAssociarConta.add(getTipoImpostoRadioButton());
+			this.panelAssociarConta.add(getContasLabel());
 		}
-		return this.panel;
+		return this.panelAssociarConta;
 	}
 
-	public JLabel getCpfClienteLabel() {
+	private JLabel getCpfClienteLabel() {
 		if (this.cpfClienteLabel == null) {
 			this.cpfClienteLabel = new JLabel("CPF: ");
 			this.cpfClienteLabel.setBounds(20, 20, 30, 20);
 		}
-		return cpfClienteLabel;
+		return this.cpfClienteLabel;
 	}
 
-	public JLabel getNumeroContaClienteLabel() {
+	private JLabel getNumeroContaClienteLabel() {
 		if (this.numeroContaClienteLabel == null) {
 			this.numeroContaClienteLabel = new JLabel("Nova Conta: ");
 			this.numeroContaClienteLabel.setBounds(20, 55, 100, 20);
 		}
-		return numeroContaClienteLabel;
+		return this.numeroContaClienteLabel;
 	}
 
-	public JTextField getCpfClienteTextField() {
+	private JTextField getCpfClienteTextField() {
 		if (this.cpfClienteTextField == null) {
 			this.cpfClienteTextField = new JTextField();
 			this.cpfClienteTextField.setColumns(10);
 			this.cpfClienteTextField.setBounds(100, 20, 100, 20);
 		}
-		return cpfClienteTextField;
+		return this.cpfClienteTextField;
 	}
 
-	public JTextField getNumeroContaTextField() {
+	private JTextField getNumeroContaTextField() {
 		if (this.numeroContaTextField == null) {
 			this.numeroContaTextField = new JTextField();
 			this.numeroContaTextField.setColumns(10);
 			this.numeroContaTextField.setBounds(100, 55, 100, 20);
 		}
-		return numeroContaTextField;
+		return this.numeroContaTextField;
 	}
 
-	public JButton getAssociarContaButton() {
+	private JButton getAssociarContaButton() {
 		if (this.associarContaButton == null) {
 			this.associarContaButton = new JButton();
 			this.associarContaButton.setText("Associar");
-			this.associarContaButton.setBounds(60, 200, 100, 40);
+			this.associarContaButton.setBounds(85, 200, 100, 40);
 			this.associarContaButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -147,13 +174,13 @@ public class AssociarContaFrame extends JFrame {
 						if (numeroConta.equals(""))
 							throw new CampoVazioException("número da conta");
 
-						GerenciaMenuFrame.getBanco().associarConta(cpf,
+						AdminMenuFrame.getBanco().associarConta(cpf,
 								numeroConta);
 
 						tipoConta.setNumero(numeroConta);
 						tipoConta.setSaldo(0);
 
-						GerenciaMenuFrame.getBanco().cadastrarConta(tipoConta);
+						AdminMenuFrame.getBanco().cadastrarConta(tipoConta);
 
 						JOptionPane.showMessageDialog(null,
 								"Conta associada ao cliente com sucesso!");
@@ -171,13 +198,13 @@ public class AssociarContaFrame extends JFrame {
 				}
 			});
 		}
-		return associarContaButton;
+		return this.associarContaButton;
 	}
 
-	public JButton getCancelarButton() {
+	private JButton getCancelarButton() {
 		if (this.cancelarButton == null) {
 			this.cancelarButton = new JButton("Cancelar");
-			this.cancelarButton.setBounds(180, 200, 100, 40);
+			this.cancelarButton.setBounds(205, 200, 100, 40);
 			this.cancelarButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -187,72 +214,73 @@ public class AssociarContaFrame extends JFrame {
 				}
 			});
 		}
-		return cancelarButton;
+		return this.cancelarButton;
 	}
 
-	public ButtonGroup getContasButtonGroup() {
-		if (this.contasButtonGroup == null) {
-			this.contasButtonGroup = new ButtonGroup();
-			this.contasButtonGroup.add(getTipoContaRadioButton());
-			this.contasButtonGroup.add(getTipoPoupancaRadioButton());
-			this.contasButtonGroup.add(getTipoEspecialRadioButton());
-			this.contasButtonGroup.add(getTipoImpostoRadioButton());
+	private ButtonGroup getTipoContaButtonGroup() {
+		if (this.tipoCorrenteButtonGroup == null) {
+			this.tipoCorrenteButtonGroup = new ButtonGroup();
+			this.tipoCorrenteButtonGroup.add(getTipoCorrenteRadioButton());
+			this.tipoCorrenteButtonGroup.add(getTipoPoupancaRadioButton());
+			this.tipoCorrenteButtonGroup.add(getTipoEspecialRadioButton());
+			this.tipoCorrenteButtonGroup.add(getTipoImpostoRadioButton());
 		}
-		return contasButtonGroup;
+		return this.tipoCorrenteButtonGroup;
 	}
 
-	public JRadioButton getTipoContaRadioButton() {
+	private JRadioButton getTipoCorrenteRadioButton() {
 		if (this.tipoContaRadioButton == null) {
-			this.tipoContaRadioButton = new JRadioButton("Normal", true);
-			this.tipoContaRadioButton.setBounds(15, 150, 70, 20);
+			this.tipoContaRadioButton = new JRadioButton("Corrente", true);
+			this.tipoContaRadioButton.setBounds(50, 150, 90, 20);
 			this.tipoContaRadioButton
-					.addItemListener(new ContasRadioButtonHandler(new Conta()));
+					.addItemListener(new ContasRadioButtonHandler(new Conta("",
+							0)));
 		}
-		return tipoContaRadioButton;
+		return this.tipoContaRadioButton;
 	}
 
-	public JRadioButton getTipoPoupancaRadioButton() {
+	private JRadioButton getTipoPoupancaRadioButton() {
 		if (this.tipoPoupancaRadioButton == null) {
 			this.tipoPoupancaRadioButton = new JRadioButton("Poupança", false);
-			this.tipoPoupancaRadioButton.setBounds(90, 150, 90, 20);
+			this.tipoPoupancaRadioButton.setBounds(140, 150, 90, 20);
 			this.tipoPoupancaRadioButton
-					.addItemListener(new ContasRadioButtonHandler(
-							new Poupanca()));
+					.addItemListener(new ContasRadioButtonHandler(new Poupanca(
+							"", 0)));
 		}
-		return tipoPoupancaRadioButton;
+		return this.tipoPoupancaRadioButton;
 	}
 
-	public JRadioButton getTipoEspecialRadioButton() {
+	private JRadioButton getTipoEspecialRadioButton() {
 		if (this.tipoEspecialRadioButton == null) {
 			this.tipoEspecialRadioButton = new JRadioButton("Especial", false);
-			this.tipoEspecialRadioButton.setBounds(179, 150, 85, 20);
+			this.tipoEspecialRadioButton.setBounds(229, 150, 85, 20);
 			this.tipoEspecialRadioButton
 					.addItemListener(new ContasRadioButtonHandler(
-							new ContaEspecial()));
+							new ContaEspecial("", 0, 5)));
 		}
-		return tipoEspecialRadioButton;
+		return this.tipoEspecialRadioButton;
 	}
 
-	public JRadioButton getTipoImpostoRadioButton() {
+	private JRadioButton getTipoImpostoRadioButton() {
 		if (this.tipoImpostoRadioButton == null) {
 			this.tipoImpostoRadioButton = new JRadioButton("Imposto", false);
-			this.tipoImpostoRadioButton.setBounds(260, 150, 100, 20);
+			this.tipoImpostoRadioButton.setBounds(310, 150, 100, 20);
 			this.tipoImpostoRadioButton
 					.addItemListener(new ContasRadioButtonHandler(
-							new ContaImposto()));
+							new ContaImposto("", 0)));
 		}
-		return tipoImpostoRadioButton;
+		return this.tipoImpostoRadioButton;
 	}
 
-	public JLabel getContasLabel() {
-		if (this.contasLabel == null) {
-			this.contasLabel = new JLabel("Tipo da Conta:");
-			this.contasLabel.setBounds(15, 120, 150, 20);
+	private JLabel getContasLabel() {
+		if (this.tipoContasLabel == null) {
+			this.tipoContasLabel = new JLabel("Tipo da Conta:");
+			this.tipoContasLabel.setBounds(15, 120, 150, 20);
 		}
-		return contasLabel;
+		return this.tipoContasLabel;
 	}
 
-	public class ContasRadioButtonHandler implements ItemListener {
+	private class ContasRadioButtonHandler implements ItemListener {
 
 		private ContaAbstrata conta;
 
@@ -264,18 +292,19 @@ public class AssociarContaFrame extends JFrame {
 		public void itemStateChanged(ItemEvent e) {
 			if (conta instanceof Conta) {
 				if (conta instanceof Poupanca)
-					tipoConta = new Poupanca();
+					tipoConta = new Poupanca("", 0);
 				else if (conta instanceof ContaEspecial)
-					tipoConta = new ContaEspecial();
+					tipoConta = new ContaEspecial("", 0, 5);
 				else
-					tipoConta = new Conta();
+					tipoConta = new Conta("", 0);
 			} else
-				tipoConta = new ContaImposto();
+				tipoConta = new ContaImposto("", 0);
 		}
 	}
 
 	private void esvaziarCampos() {
 		getCpfClienteTextField().setText("");
 		getNumeroContaTextField().setText("");
+		this.tipoConta = null;
 	}
 }

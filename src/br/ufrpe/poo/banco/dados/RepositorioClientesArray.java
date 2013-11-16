@@ -89,24 +89,25 @@ public class RepositorioClientesArray implements IRepositorioClientes {
 
 	@Override
 	public boolean remover(String cpf) throws RepositorioException {
-		boolean sucesso = false;
+
 		int i = this.getIndice(cpf);
 		if (i < this.indice) {
 			this.indice = this.indice - 1;
 			this.clientes[i] = this.clientes[this.indice];
 			this.clientes[this.indice] = null;
+			return true;
 		}
-		return sucesso;
+		return false;
 	}
 
 	@Override
 	public boolean atualizar(Cliente cliente) throws RepositorioException {
-		boolean sucesso = false;
 		int i = this.getIndice(cliente.getCpf());
 		if (i < this.indice) {
 			this.clientes[i] = cliente;
+			return true;
 		}
-		return sucesso;
+		return false;
 	}
 
 	@Override

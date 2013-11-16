@@ -70,34 +70,34 @@ public class RepositorioContasArray implements IRepositorioContas {
 
 	@Override
 	public ContaAbstrata procurar(String numero) {
-		ContaAbstrata resposta = null;
+		ContaAbstrata conta = null;
 		int i = this.getIndice(numero);
 		if (i < this.indice) {
-			resposta = this.contas[i];
+			conta = this.contas[i];
 		}
-		return resposta;
+		return conta;
 	}
 
 	@Override
 	public boolean remover(String numero) throws RepositorioException {
-		boolean sucesso = false;
 		int i = this.getIndice(numero);
 		if (i < this.indice) {
 			this.indice = this.indice - 1;
 			this.contas[i] = this.contas[this.indice];
 			this.contas[this.indice] = null;
+			return true;
 		}
-		return sucesso;
+		return false;
 	}
 
 	@Override
 	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
-		boolean sucesso = false;
 		int i = this.getIndice(conta.getNumero());
 		if (i < this.indice) {
 			this.contas[i] = conta;
+			return true;
 		}
-		return sucesso;
+		return false;
 	}
 
 	@Override

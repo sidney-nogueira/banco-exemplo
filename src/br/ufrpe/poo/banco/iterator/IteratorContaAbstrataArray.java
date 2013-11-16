@@ -10,12 +10,12 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
  * 
  */
 public class IteratorContaAbstrataArray implements IteratorContaAbstrata {
-	
+
 	/**
-	 *  Array que possui as contas para as operacoes do iterador.
+	 * Array que possui as contas para as operacoes do iterador.
 	 */
 	private ContaAbstrata[] contas;
-	
+
 	/**
 	 * Indice da posicao atual do array de contas.
 	 */

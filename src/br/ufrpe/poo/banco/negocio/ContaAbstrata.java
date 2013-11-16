@@ -23,21 +23,33 @@ public abstract class ContaAbstrata implements Serializable {
 	 * Valor do saldo da conta bancaria.
 	 */
 	protected double saldo;
-	
-	public ContaAbstrata(){
-		
-	}
-	
+
 	public ContaAbstrata(String numero, double valor) {
 		this.numero = numero;
 		this.saldo = valor;
+	}
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public String getNumero() {
+		return this.numero;
+	}
+
+	public double getSaldo() {
+		return this.saldo;
 	}
 
 	/**
 	 * Credita um valor a conta bancaria.
 	 * 
 	 * @param valor
-	 * 			Valor a ser creditado a conta.
+	 *            Valor a ser creditado a conta.
 	 */
 	public void creditar(double valor) {
 		this.saldo = this.saldo + valor;
@@ -47,34 +59,19 @@ public abstract class ContaAbstrata implements Serializable {
 	 * Debita um valor da conta bancaria.
 	 * 
 	 * @param valor
-	 * 			Valor a ser debita da conta.
+	 *            Valor a ser debita da conta.
 	 * @throws SaldoInsuficienteException
-	 * 			Lancada caso o valor a ser debitado exceda o valor do saldo atual da conta.
+	 *             Lancada caso o valor a ser debitado exceda o valor do saldo
+	 *             atual da conta.
 	 * 
 	 */
 	public abstract void debitar(double valor)
 			throws SaldoInsuficienteException;
 
-	public void setSaldo(double saldo) {
-		this.saldo = saldo;
-	}
-	
-	public void setNumero(String numero){
-		this.numero = numero;
-	}
-	
-	public String getNumero() {
-		return this.numero;
-	}
-
-	public double getSaldo() {
-		return this.saldo;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Conta) {
-			Conta c = (Conta) obj;
+		if (obj instanceof ContaAbstrata) {
+			ContaAbstrata c = (ContaAbstrata) obj;
 			return c.getNumero().equals(this.getNumero());
 		}
 		return false;

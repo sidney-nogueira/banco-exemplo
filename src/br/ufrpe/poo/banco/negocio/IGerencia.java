@@ -5,6 +5,7 @@ import br.ufrpe.poo.banco.exceptions.ClienteJaPossuiContaException;
 import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
 import br.ufrpe.poo.banco.exceptions.ContaJaAssociadaException;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
+import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
 
 public interface IGerencia {
@@ -23,4 +24,9 @@ public interface IGerencia {
 			throws ClienteJaPossuiContaException, ContaJaAssociadaException,
 			ClienteNaoCadastradoException;
 
+	void removerCliente(String cpf) throws RepositorioException,
+			ClienteNaoCadastradoException;
+
+	void removerConta(String numeroConta) throws RepositorioException,
+			ContaNaoEncontradaException;
 }

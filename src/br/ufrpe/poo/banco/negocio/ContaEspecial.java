@@ -14,15 +14,14 @@ public class ContaEspecial extends Conta {
 	 * Valor do bonus.
 	 */
 	protected double bonus;
-	
-	public ContaEspecial(){
-		
-	}
-	
+
 	public ContaEspecial(String numero, double saldo, double bonus) {
 		super(numero, saldo);
 		this.bonus = bonus;
+	}
 
+	public double getBonus() {
+		return this.bonus;
 	}
 
 	@Override
@@ -39,8 +38,4 @@ public class ContaEspecial extends Conta {
 		bonus = 0;
 	}
 
-	public double getBonus() {
-		return this.bonus;
-	}
-	
 }

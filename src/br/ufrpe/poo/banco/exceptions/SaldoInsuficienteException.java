@@ -11,7 +11,8 @@ public class SaldoInsuficienteException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public SaldoInsuficienteException(String numero, double saldo) {
-		super("Saldo insuficiente. O saldo atual da conta " + numero + " = "
-				+ saldo);
+		super(String.format(
+				"Saldo insuficiente! O saldo atual da conta %s é R$%.2f",
+				numero, saldo));
 	}
 }

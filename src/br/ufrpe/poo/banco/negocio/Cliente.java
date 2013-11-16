@@ -29,12 +29,32 @@ public class Cliente implements Serializable {
 	/**
 	 * Array de numero de contas a qual o cliente possui.
 	 */
-	protected ArrayList<String> contas = new ArrayList<String>();
+	protected ArrayList<String> contas;
 
-	public Cliente(String nome, String cpf, ArrayList<String> contas) {
+	public Cliente(String nome, String cpf) {
 		this.nome = nome;
 		this.cpf = cpf;
-		this.contas = contas;
+		this.contas = new ArrayList<String>();
+	}
+
+	public String getNome() {
+		return this.nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCpf() {
+		return this.cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public ArrayList<String> getContas() {
+		return this.contas;
 	}
 
 	public void adicionarConta(String numeroConta)
@@ -53,32 +73,12 @@ public class Cliente implements Serializable {
 		this.contas.remove(index);
 	}
 
-	private int procurarConta(String numeroConta) {
+	public void removerTodasAsContas() {
+		this.contas = null;
+	}
+
+	public int procurarConta(String numeroConta) {
 		return this.contas.indexOf(numeroConta);
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public ArrayList<String> getContas() {
-		return contas;
-	}
-
-	public void setContas(ArrayList<String> contas) {
-		this.contas = contas;
 	}
 
 	@Override
@@ -89,6 +89,12 @@ public class Cliente implements Serializable {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+
+		return ("Nome: " + this.nome + "\nCPF: " + this.cpf + "\nContas: " + this.contas);
 	}
 
 }
