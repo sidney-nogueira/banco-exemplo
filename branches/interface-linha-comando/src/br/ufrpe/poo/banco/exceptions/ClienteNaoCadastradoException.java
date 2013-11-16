@@ -11,7 +11,7 @@ public class ClienteNaoCadastradoException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public ClienteNaoCadastradoException() {
-		super("Nenhum cliente foi cadastrado com esse cpf.");
+		super("Nenhum cliente foi cadastrado com esse cpf!");
 	}
 
 }

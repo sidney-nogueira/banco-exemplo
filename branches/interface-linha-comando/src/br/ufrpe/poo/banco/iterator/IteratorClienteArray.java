@@ -10,14 +10,14 @@ import br.ufrpe.poo.banco.negocio.Cliente;
  * 
  */
 public class IteratorClienteArray implements IteratorCliente {
-	
+
 	/**
 	 * Array que possui os clientes para as operacoes do iterador.
 	 */
 	private Cliente[] clientes;
-	
+
 	/**
-	 *  Indice da posicao atual do array de clientes.
+	 * Indice da posicao atual do array de clientes.
 	 */
 	private int indice;
 

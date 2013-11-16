@@ -12,6 +12,6 @@ public class ContaJaCadastradaException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public ContaJaCadastradaException() {
-		super("Ja existe uma conta cadastrada com este numero");
+		super("Já existe uma conta cadastrada com este numero!");
 	}
 }

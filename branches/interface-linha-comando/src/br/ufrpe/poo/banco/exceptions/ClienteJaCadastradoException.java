@@ -11,7 +11,7 @@ public class ClienteJaCadastradoException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public ClienteJaCadastradoException() {
-		super("Cliente ja cadastrado com esse cpf");
+		super("Cliente ja cadastrado com esse cpf!");
 	}
 
 }

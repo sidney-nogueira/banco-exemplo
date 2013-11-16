@@ -12,6 +12,6 @@ public class ContaNaoAssociadaAoClienteException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public ContaNaoAssociadaAoClienteException() {
-		super("O cliente não possui essa conta.");
+		super("O cliente não possui essa conta!");
 	}
 }
