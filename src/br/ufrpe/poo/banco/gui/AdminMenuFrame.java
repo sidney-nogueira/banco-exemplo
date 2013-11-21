@@ -20,12 +20,18 @@ public class AdminMenuFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static IGerencia banco;
+	public static IGerencia banco;
 	private CadastrarClienteFrame cadastrarClienteFrame;
 	private AssociarContaFrame associarContaFrame;
 	private ConsultarClienteFrame consultarClienteFrame;
 	private RemoverClienteFrame removerClienteFrame;
 	private RemoverContaFrame removerContaFrame;
+
+	public static IGerencia getBanco() {
+		return banco;
+	}
+
+	private AtualizarClienteFrame atualizarClienteFrame;
 	private JPanel panelGerenciaMenu;
 	private JButton cadastrarClienteButton;
 	private JButton associarContaButton;
@@ -41,8 +47,8 @@ public class AdminMenuFrame extends JFrame {
 			@Override
 			public void run() {
 				try {
-					AdminMenuFrame bancoFrame = new AdminMenuFrame();
-					bancoFrame.setVisible(true);
+					AdminMenuFrame adminMenuFrame = new AdminMenuFrame();
+					adminMenuFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -52,20 +58,18 @@ public class AdminMenuFrame extends JFrame {
 
 	public AdminMenuFrame() {
 		super();
-
 		try {
 			AdminMenuFrame.banco = Banco.getInstance();
 			initialize();
 		} catch (InicializacaoSistemaException | RepositorioException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro",
 					JOptionPane.ERROR_MESSAGE);
-			this.setVisible(false);
 			System.exit(0);
 		}
 	}
 
 	private void initialize() {
-		this.setTitle("Gerência Banco");
+		this.setTitle("Gerencia Banco");
 		this.setResizable(false);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setBounds(0, 0, 500, 200);
@@ -112,9 +116,7 @@ public class AdminMenuFrame extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					associarContaFrame = AssociarContaFrame
-							.getInstanceAssociarContaFrame();
-					associarContaFrame.setVisible(true);
+					associarContaFrame = new AssociarContaFrame();
 				}
 			});
 		}
@@ -132,7 +134,6 @@ public class AdminMenuFrame extends JFrame {
 					consultarClienteFrame = ConsultarClienteFrame
 							.getInstanceConsultarClienteFrame();
 					consultarClienteFrame.setVisible(true);
-
 				}
 			});
 		}
@@ -143,7 +144,15 @@ public class AdminMenuFrame extends JFrame {
 		if (this.atualizarClienteButton == null) {
 			this.atualizarClienteButton = new JButton();
 			this.atualizarClienteButton.setText("Atualizar Cliente");
+			this.atualizarClienteButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					atualizarClienteFrame = new AtualizarClienteFrame();
+				}
+			});
 		}
+
 		return this.atualizarClienteButton;
 	}
 
@@ -172,9 +181,7 @@ public class AdminMenuFrame extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					removerContaFrame = RemoverContaFrame
-							.getInstanceRemoverClienteFrame();
-					removerContaFrame.setVisible(true);
+					removerContaFrame = new RemoverContaFrame();
 				}
 			});
 		}
@@ -188,7 +195,28 @@ public class AdminMenuFrame extends JFrame {
 		return this.gridLayout;
 	}
 
-	public static IGerencia getBanco() {
-		return AdminMenuFrame.banco;
+	public AtualizarClienteFrame getAtualizarClienteFrame() {
+		return this.atualizarClienteFrame;
 	}
+
+	public CadastrarClienteFrame getCadastrarClienteFrame() {
+		return cadastrarClienteFrame;
+	}
+
+	public AssociarContaFrame getAssociarContaFrame() {
+		return associarContaFrame;
+	}
+
+	public ConsultarClienteFrame getConsultarClienteFrame() {
+		return consultarClienteFrame;
+	}
+
+	public RemoverClienteFrame getRemoverClienteFrame() {
+		return removerClienteFrame;
+	}
+
+	public RemoverContaFrame getRemoverContaFrame() {
+		return removerContaFrame;
+	}
+
 }

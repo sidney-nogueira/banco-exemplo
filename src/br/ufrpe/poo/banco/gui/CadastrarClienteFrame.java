@@ -34,7 +34,6 @@ public class CadastrarClienteFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private static CadastrarClienteFrame instanceCadastroClienteFrame;
-
 	private JPanel panelCadastroCliente;
 	private JTextField cpfTextField;
 	private JLabel cpfLabel;
@@ -173,7 +172,7 @@ public class CadastrarClienteFrame extends JFrame {
 
 	private JLabel getContaLabel() {
 		if (this.contaLabel == null) {
-			this.contaLabel = new JLabel("Número da conta: ");
+			this.contaLabel = new JLabel("Numero da conta: ");
 			this.contaLabel.setBounds(20, 90, 120, 20);
 		}
 		return this.contaLabel;
@@ -190,32 +189,39 @@ public class CadastrarClienteFrame extends JFrame {
 					try {
 						String cpf = getCpfTextField().getText();
 						verificarCampoVazio(cpf, "CPF");
+
 						String nome = getNomeTextField().getText();
 						verificarCampoVazio(nome, "Nome");
-						String numeroConta = getContaTextField().getText();
-						verificarCampoVazio(numeroConta, "Número da Conta");
 
-						if (AdminMenuFrame.getBanco().procurarCliente(cpf) != null)
+						String numeroConta = getContaTextField().getText();
+						verificarCampoVazio(numeroConta, "Numero da Conta");
+
+						if (AdminMenuFrame.banco.procurarCliente(cpf) != null)
 							throw new ClienteJaCadastradoException();
-						if (AdminMenuFrame.getBanco()
-								.procurarConta(numeroConta) != null)
+						if (AdminMenuFrame.banco.procurarConta(numeroConta) != null)
 							throw new ContaJaCadastradaException();
 
 						tipoConta.setNumero(numeroConta);
 						tipoConta.setSaldo(0);
-						Cliente cliente = new Cliente(nome, cpf);
-						cliente.adicionarConta(numeroConta);
-						AdminMenuFrame.getBanco().cadastrarConta(tipoConta);
-						AdminMenuFrame.getBanco().cadastrarCliente(cliente);
-						JOptionPane.showMessageDialog(null,
-								"Cliente cadastrado com sucesso!");
-						esvaziarCampos();
 
-					} catch (CampoVazioException | ClienteJaCadastradoException
+						Cliente cliente = new Cliente(nome, cpf);
+
+						cliente.adicionarConta(numeroConta);
+						AdminMenuFrame.banco.inserirConta(tipoConta);
+						AdminMenuFrame.banco.cadastrarCliente(cliente);
+
+						JOptionPane.showMessageDialog(null,
+								"Cliente cadastrado com sucesso!", "Sucesso",
+								JOptionPane.INFORMATION_MESSAGE);
+						esvaziarCampos();
+					} catch (ClienteJaCadastradoException
 							| ContaJaCadastradaException | RepositorioException
 							| ClienteJaPossuiContaException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
+					} catch (CampoVazioException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 
 				}
@@ -224,11 +230,10 @@ public class CadastrarClienteFrame extends JFrame {
 		return this.submeterCadastroButton;
 	}
 
-	private void verificarCampoVazio(String cpf, String valor)
+	private void verificarCampoVazio(String str, String valor)
 			throws CampoVazioException {
-		if (cpf.equals(""))
+		if (str.equals(""))
 			throw new CampoVazioException(valor);
-
 	}
 
 	private JButton getApagarCamposButton() {
@@ -254,6 +259,7 @@ public class CadastrarClienteFrame extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					esvaziarCampos();
 					setVisible(false);
 				}
 			});
@@ -285,7 +291,7 @@ public class CadastrarClienteFrame extends JFrame {
 
 	private JRadioButton getTipoPoupancaRadioButton() {
 		if (this.tipoPoupancaRadioButton == null) {
-			this.tipoPoupancaRadioButton = new JRadioButton("Poupança", false);
+			this.tipoPoupancaRadioButton = new JRadioButton("Poupanca", false);
 			this.tipoPoupancaRadioButton.setBounds(140, 150, 90, 20);
 			this.tipoPoupancaRadioButton
 					.addItemListener(new TipoContasRadioButtonHandler(
@@ -300,7 +306,7 @@ public class CadastrarClienteFrame extends JFrame {
 			this.tipoEspecialRadioButton.setBounds(229, 150, 85, 20);
 			this.tipoEspecialRadioButton
 					.addItemListener(new TipoContasRadioButtonHandler(
-							new ContaEspecial("", 0, 5)));
+							new ContaEspecial("", 0)));
 		}
 		return this.tipoEspecialRadioButton;
 	}
@@ -338,7 +344,7 @@ public class CadastrarClienteFrame extends JFrame {
 				if (conta instanceof Poupanca)
 					tipoConta = new Poupanca("", 0);
 				else if (conta instanceof ContaEspecial)
-					tipoConta = new ContaEspecial("", 0, 5);
+					tipoConta = new ContaEspecial("", 0);
 				else
 					tipoConta = new Conta("", 0);
 			} else
@@ -350,7 +356,8 @@ public class CadastrarClienteFrame extends JFrame {
 		this.getNomeTextField().setText("");
 		this.getCpfTextField().setText("");
 		this.getContaTextField().setText("");
-		this.tipoConta = null;
+		getTipoCorrenteRadioButton().setSelected(true);
+		tipoConta = new Conta("", 0);
 	}
 
 }

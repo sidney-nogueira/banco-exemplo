@@ -14,30 +14,55 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import br.ufrpe.poo.banco.exceptions.CampoVazioException;
+import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
+import br.ufrpe.poo.banco.exceptions.ClienteNaoPossuiContaException;
+import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
+import br.ufrpe.poo.banco.exceptions.RemocaoInvalidaException;
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
+import br.ufrpe.poo.banco.negocio.Cliente;
 
 public class RemoverContaFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static RemoverContaFrame instanceRemoverContaFrame;
+
 	private JPanel panelRemoverConta;
 	private JButton removerContaButton;
 	private JButton cancelarButton;
 	private JTextField numeroContaTextField;
 	private JLabel numeroContaLabel;
-
-	public static RemoverContaFrame getInstanceRemoverClienteFrame() {
-		if (RemoverContaFrame.instanceRemoverContaFrame == null) {
-			RemoverContaFrame.instanceRemoverContaFrame = new RemoverContaFrame();
-		}
-		return RemoverContaFrame.instanceRemoverContaFrame;
-	}
+	private Cliente cliente;
 
 	public RemoverContaFrame() {
 		super();
+		try {
+			String cpf = JOptionPane.showInputDialog(null,
+					"Informe o CPF do cliente: ", "CPF",
+					JOptionPane.PLAIN_MESSAGE);
+			if (cpf == null)
+				return;
+			cliente = AdminMenuFrame.banco.procurarCliente(cpf);
+			if (cliente == null)
+				throw new ClienteNaoCadastradoException();
+
+			if (cliente.getContas().size() == 1)
+				throw new RemocaoInvalidaException();
+		} catch (ClienteNaoCadastradoException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		} catch (RemocaoInvalidaException e) {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"O cliente nao pode ter contas removidas! Ele so possui 1 conta ativa!",
+							"Alerta", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		initialize();
 	}
 
 	private void initialize() {
+		this.setVisible(true);
 		this.setTitle("Remover Conta");
 		this.setResizable(false);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -94,22 +119,33 @@ public class RemoverContaFrame extends JFrame {
 			this.removerContaButton = new JButton("Excluir");
 			this.removerContaButton.setBounds(60, 60, 100, 40);
 			this.removerContaButton.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					try{
-						String numeroConta = getNumeroContaTextField().getText();
+					try {
+						String numeroConta = getNumeroContaTextField()
+								.getText();
 						if (numeroConta.equals(""))
-							throw new CampoVazioException("número da conta");
-						
-						
-					}catch(CampoVazioException e){
+							throw new CampoVazioException("numero da conta");
+
+						if (cliente.getContas().size() == 1)
+							throw new RemocaoInvalidaException();
+
+						AdminMenuFrame.banco.removerConta(cliente, numeroConta);
+						JOptionPane.showMessageDialog(null,
+								"Conta removida com sucesso!", "Sucesso",
+								JOptionPane.INFORMATION_MESSAGE);
+					} catch (ContaNaoEncontradaException
+							| RemocaoInvalidaException
+							| ClienteNaoPossuiContaException
+							| RepositorioException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
 						esvaziarCampos();
+					} catch (CampoVazioException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
-					
-					
 				}
 			});
 		}
@@ -143,7 +179,7 @@ public class RemoverContaFrame extends JFrame {
 
 	private JLabel getNumeroContaLabel() {
 		if (this.numeroContaLabel == null) {
-			this.numeroContaLabel = new JLabel("Número: ");
+			this.numeroContaLabel = new JLabel("Numero: ");
 			this.numeroContaLabel.setBounds(20, 20, 70, 20);
 		}
 		return this.numeroContaLabel;

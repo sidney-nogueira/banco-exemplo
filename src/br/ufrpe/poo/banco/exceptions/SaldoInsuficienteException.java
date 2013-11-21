@@ -12,7 +12,7 @@ public class SaldoInsuficienteException extends Exception {
 
 	public SaldoInsuficienteException(String numero, double saldo) {
 		super(String.format(
-				"Saldo insuficiente! O saldo atual da conta %s é R$%.2f",
+				"Saldo insuficiente! O saldo atual da conta %s eh R$%.2f",
 				numero, saldo));
 	}
 }

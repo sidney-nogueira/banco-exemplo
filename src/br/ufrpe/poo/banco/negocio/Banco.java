@@ -4,6 +4,7 @@ import br.ufrpe.poo.banco.dados.IRepositorioClientes;
 import br.ufrpe.poo.banco.dados.IRepositorioContas;
 import br.ufrpe.poo.banco.dados.RepositorioClientesArquivoBin;
 import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
+import br.ufrpe.poo.banco.exceptions.AtualizacaoNaoRealizadaException;
 import br.ufrpe.poo.banco.exceptions.ClienteJaCadastradoException;
 import br.ufrpe.poo.banco.exceptions.ClienteJaPossuiContaException;
 import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
@@ -83,11 +84,10 @@ public class Banco implements IGerencia, ICliente {
 	}
 
 	@Override
-	public void cadastrarConta(ContaAbstrata conta)
-			throws RepositorioException, ContaJaCadastradaException {
+	public void inserirConta(ContaAbstrata conta) throws RepositorioException,
+			ContaJaCadastradaException {
 		if (!this.contas.inserir(conta))
 			throw new ContaJaCadastradaException();
-
 	}
 
 	@Override
@@ -98,13 +98,14 @@ public class Banco implements IGerencia, ICliente {
 	@Override
 	public void associarConta(String cpf, String numeroConta)
 			throws ClienteJaPossuiContaException, ContaJaAssociadaException,
-			ClienteNaoCadastradoException {
+			ClienteNaoCadastradoException, RepositorioException {
 		Cliente cliente = this.procurarCliente(cpf);
 		if (cliente != null) {
 			ContaAbstrata conta = procurarConta(numeroConta);
-			if (conta == null)
+			if (conta == null) {
 				cliente.adicionarConta(numeroConta);
-			else
+				this.clientes.atualizar(cliente);
+			} else
 				throw new ContaJaAssociadaException();
 		} else
 			throw new ClienteNaoCadastradoException();
@@ -112,24 +113,27 @@ public class Banco implements IGerencia, ICliente {
 
 	@Override
 	public void removerCliente(String cpf) throws RepositorioException,
-			ClienteNaoCadastradoException {
+			ClienteNaoCadastradoException, ContaNaoEncontradaException,
+			ClienteNaoPossuiContaException {
+		Cliente cliente = this.procurarCliente(cpf);
+		int i = 0;
+		while (!cliente.getContas().isEmpty()) {
+			String numeroConta = cliente.consultarNumeroConta(i);
+			i++;
+			this.removerConta(cliente, numeroConta);
+		}
 		if (!this.clientes.remover(cpf))
 			throw new ClienteNaoCadastradoException();
 	}
 
 	@Override
-	public void removerConta(String numeroConta) throws RepositorioException,
-			ContaNaoEncontradaException {
+	public void removerConta(Cliente cliente, String numeroConta)
+			throws RepositorioException, ContaNaoEncontradaException,
+			ClienteNaoPossuiContaException {
+		cliente.removerConta(numeroConta);
 		if (!this.contas.remover(numeroConta))
 			throw new ContaNaoEncontradaException();
-	}
-
-	@Override
-	public ContaAbstrata procurarEmContasDoCliente(Cliente cliente,
-			String numero) throws ClienteNaoPossuiContaException {
-		if (cliente.procurarConta(numero) == -1)
-			throw new ClienteNaoPossuiContaException();
-		return this.contas.procurar(numero);
+		this.clientes.atualizar(cliente);
 	}
 
 	@Override
@@ -149,17 +153,24 @@ public class Banco implements IGerencia, ICliente {
 			throw new ValorInvalidoException();
 		conta.debitar(valor);
 		this.contas.atualizar(conta);
-
 	}
 
 	@Override
-	public void transferir(ContaAbstrata conta1, ContaAbstrata conta2,
-			double valor) throws SaldoInsuficienteException,
-			RepositorioException {
-		conta1.debitar(valor);
-		conta2.creditar(valor);
-		this.contas.atualizar(conta1);
-		this.contas.atualizar(conta2);
+	public void transferir(ContaAbstrata contaOrigem,
+			ContaAbstrata contaDestino, double valor)
+			throws SaldoInsuficienteException, RepositorioException,
+			ValorInvalidoException {
+		this.debitar(contaOrigem, valor);
+		this.creditar(contaDestino, valor);
+		this.contas.atualizar(contaOrigem);
+		this.contas.atualizar(contaDestino);
+	}
+
+	@Override
+	public void atualizarCliente(Cliente cliente) throws RepositorioException,
+			AtualizacaoNaoRealizadaException {
+		if (!this.clientes.atualizar(cliente))
+			throw new AtualizacaoNaoRealizadaException();
 	}
 
 }

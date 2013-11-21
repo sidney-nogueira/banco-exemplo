@@ -1,7 +1,8 @@
 package br.ufrpe.poo.banco.exceptions;
 
 /**
- * Excessao que representa erros na procura de cadastros de clientes.
+ * Excessao que representa um erro quando uma busca de um cliente nao cadastrado
+ * eh feita.
  * 
  * @author
  * 

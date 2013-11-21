@@ -13,17 +13,17 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import br.ufrpe.poo.banco.exceptions.AtualizacaoNaoRealizadaException;
 import br.ufrpe.poo.banco.exceptions.CampoVazioException;
 import br.ufrpe.poo.banco.exceptions.ClienteNaoCadastradoException;
+import br.ufrpe.poo.banco.exceptions.ClienteNaoPossuiContaException;
 import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
-import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
-import br.ufrpe.poo.banco.negocio.Banco;
-import br.ufrpe.poo.banco.negocio.Cliente;
 
 public class RemoverClienteFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+
 	private static RemoverClienteFrame instanceRemoverClienteFrame;
 	private JPanel panelRemoverCliente;
 	private JButton removerClienteButton;
@@ -108,32 +108,28 @@ public class RemoverClienteFrame extends JFrame {
 						if (cpf.equals(""))
 							throw new CampoVazioException("CPF");
 
-						Cliente achouCliente = Banco.getInstance()
-								.procurarCliente(cpf);
-						
-						if(achouCliente == null)
+						if (AdminMenuFrame.banco.procurarCliente(cpf) == null)
 							throw new ClienteNaoCadastradoException();
-						
-						if(!achouCliente.getContas().isEmpty()){
-							for(String numeroConta : achouCliente.getContas()){
-								Banco.getInstance().removerConta(numeroConta);
-							}
-						}
-						
-						achouCliente.removerTodasAsContas();
-						Banco.getInstance().removerCliente(cpf);
 
-						JOptionPane.showMessageDialog(null,
-								"Cliente removido com sucesso! Todas as contas associadas a ele também foram removidas!");
+						AdminMenuFrame.banco.removerCliente(cpf);
+
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"Cliente removido com sucesso! Todas as contas associadas a ele tambem foram removidas!",
+										"Sucesso",
+										JOptionPane.INFORMATION_MESSAGE);
 						esvaziarCampos();
-						
-					} catch (CampoVazioException | RepositorioException
-							| InicializacaoSistemaException
-							| ContaNaoEncontradaException
+					} catch (RepositorioException | ContaNaoEncontradaException
+							| ClienteNaoPossuiContaException
+							| AtualizacaoNaoRealizadaException
 							| ClienteNaoCadastradoException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
 						esvaziarCampos();
+					} catch (CampoVazioException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 
 				}

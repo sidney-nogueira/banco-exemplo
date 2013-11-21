@@ -7,11 +7,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import br.ufrpe.poo.banco.exceptions.AcessoMenuClienteBloqueadoExeception;
 import br.ufrpe.poo.banco.exceptions.ClienteNaoPossuiContaException;
 import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
+import br.ufrpe.poo.banco.exceptions.ContasOrigemDestinoIguaisException;
 import br.ufrpe.poo.banco.exceptions.EntradaInvalidaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
@@ -29,15 +32,8 @@ public class ClienteMenuFrame extends JFrame {
 	private JButton saqueButton;
 	private JButton exitButton;
 	private Cliente cliente;
-	private JOptionPane getSaldoPane;
-	private static ClienteMenuFrame clienteMenuFrame;
-
-	public static ClienteMenuFrame getInstanceClienteMenuFrame(){
-		if(ClienteMenuFrame.clienteMenuFrame == null){
-			ClienteMenuFrame.clienteMenuFrame = new ClienteMenuFrame();
-		}
-		return ClienteMenuFrame.clienteMenuFrame;
-	}
+	private JTextArea formularioContasClienteTextArea;
+	private JScrollPane formularioContasClienteScrollPane;
 
 	public ClienteMenuFrame() {
 		super();
@@ -48,9 +44,12 @@ public class ClienteMenuFrame extends JFrame {
 						"Para acessar o menu informe o seu CPF (Tentativa = "
 								+ cont + "): ", "Senha (CPF)",
 						JOptionPane.PLAIN_MESSAGE);
+
+				if (cpf == null)
+					return;
 				Cliente achouCliente = AppletClienteMenuFrame.banco
 						.procurarCliente(cpf);
-					
+
 				if (achouCliente != null) {
 					cliente = achouCliente;
 					break;
@@ -63,13 +62,12 @@ public class ClienteMenuFrame extends JFrame {
 		} catch (AcessoMenuClienteBloqueadoExeception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro",
 					JOptionPane.ERROR_MESSAGE);
-			this.setVisible(false);
-			System.exit(0);
-		} 
+
+		}
 	}
 
 	private void initialize() {
-		this.setTitle("Menu Cliente (Nome: " + cliente.getNome() + ")");
+		this.setTitle("Cliente " + cliente.getNome() + " ativo!");
 		this.setSize(500, 200);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -80,6 +78,8 @@ public class ClienteMenuFrame extends JFrame {
 		this.add(getSaqueButton());
 		this.add(getTransferirButton());
 		this.add(getExitButton());
+		this.add(getFormularioContasClienteScrollPane());
+		this.setVisible(true);
 	}
 
 	public GridLayout getGridLayout() {
@@ -99,19 +99,27 @@ public class ClienteMenuFrame extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 						String numeroConta = JOptionPane.showInputDialog(null,
-								"Informe o número da conta: ", "Conta",
+								"Informe o numero da conta: ", "Conta",
 								JOptionPane.PLAIN_MESSAGE);
-						
-						ContaAbstrata achouConta = AppletClienteMenuFrame.banco
-								.procurarEmContasDoCliente(cliente, numeroConta);
-						String saldo = String.format("Saldo: R$%.2f",
+
+						if (numeroConta == null)
+							return;
+
+						ContaAbstrata achouConta = null;
+						if (cliente.procurarConta(numeroConta) != -1)
+							achouConta = AppletClienteMenuFrame.banco
+									.procurarConta(numeroConta);
+						else
+							throw new ClienteNaoPossuiContaException();
+
+						String saldo = String.format("R$%.2f",
 								achouConta.getSaldo());
-						
+
 						JOptionPane.showMessageDialog(null, saldo, "Saldo",
 								JOptionPane.PLAIN_MESSAGE);
 					} catch (ClienteNaoPossuiContaException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
-								"Erro", JOptionPane.ERROR_MESSAGE);
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 
 				}
@@ -130,35 +138,63 @@ public class ClienteMenuFrame extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 						String numeroContaOrigem = JOptionPane.showInputDialog(
-								null,
-								"Informe o número de uma de suas contas:",
+								null, "Informe o numero da conta origem:",
 								"Conta Origem", JOptionPane.PLAIN_MESSAGE);
-						ContaAbstrata contaOrigem = AppletClienteMenuFrame.banco
-								.procurarEmContasDoCliente(cliente,
-										numeroContaOrigem);
+
+						if (numeroContaOrigem == null)
+							return;
+
+						ContaAbstrata contaOrigem = null;
+						if (cliente.procurarConta(numeroContaOrigem) != -1)
+							contaOrigem = AppletClienteMenuFrame.banco
+									.procurarConta(numeroContaOrigem);
+						else
+							throw new ClienteNaoPossuiContaException();
+
 						String numeroContaDestino = JOptionPane
 								.showInputDialog(null,
-										"Informe o número da conta destino:",
+										"Informe o numero da conta destino:",
 										"Conta Destino",
 										JOptionPane.PLAIN_MESSAGE);
+
+						if (numeroContaDestino == null)
+							return;
+
+						if (numeroContaDestino
+								.equalsIgnoreCase(numeroContaOrigem))
+							throw new ContasOrigemDestinoIguaisException();
+
 						ContaAbstrata contaDestino = AppletClienteMenuFrame.banco
 								.procurarConta(numeroContaDestino);
+
 						if (contaDestino == null)
 							throw new ContaNaoEncontradaException();
+
 						String valor = JOptionPane.showInputDialog(null,
-								"Informe o valor da transferência:",
-								"Transferência", JOptionPane.PLAIN_MESSAGE);
-						if (!valor.matches("[0-9]*"))
+								"Informe o valor da transferencia:",
+								"Transferencia", JOptionPane.PLAIN_MESSAGE);
+
+						if (!valor.matches("[0-9]*") || valor.equals(""))
 							throw new EntradaInvalidaException();
+
 						double valor2 = Double.parseDouble(valor);
+
 						AppletClienteMenuFrame.banco.transferir(contaOrigem,
 								contaDestino, valor2);
-					} catch (ContaNaoEncontradaException
-							| EntradaInvalidaException
-							| ClienteNaoPossuiContaException
-							| SaldoInsuficienteException | RepositorioException e) {
+
+						JOptionPane.showMessageDialog(null,
+								"Transferencia realizada com sucesso!",
+								"Sucesso", JOptionPane.INFORMATION_MESSAGE);
+					} catch (EntradaInvalidaException | RepositorioException
+							| ContasOrigemDestinoIguaisException
+							| ValorInvalidoException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
+					} catch (ContaNaoEncontradaException
+							| ClienteNaoPossuiContaException
+							| SaldoInsuficienteException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});
@@ -177,24 +213,41 @@ public class ClienteMenuFrame extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 						String numero = JOptionPane.showInputDialog(null,
-								"Informe o número da conta:", "Conta",
+								"Informe o numero da conta:", "Conta",
 								JOptionPane.PLAIN_MESSAGE);
-						ContaAbstrata conta = AppletClienteMenuFrame.banco
-								.procurarEmContasDoCliente(cliente, numero);
+
+						if (numero == null)
+							return;
+
+						ContaAbstrata achouConta = null;
+						if (cliente.procurarConta(numero) != -1)
+							achouConta = AppletClienteMenuFrame.banco
+									.procurarConta(numero);
+						else
+							throw new ClienteNaoPossuiContaException();
+
 						String valor = JOptionPane.showInputDialog(null,
 								"Informe o valor a ser depositado:",
 								"Depositar", JOptionPane.PLAIN_MESSAGE);
-						if (!valor.matches("[0-9]*"))
+
+						if (!valor.matches("[0-9]*") || valor.equals(""))
 							throw new EntradaInvalidaException();
+
 						double valor2 = Double.parseDouble(valor);
-						AppletClienteMenuFrame.banco.creditar(conta, valor2);
+
+						AppletClienteMenuFrame.banco.creditar(achouConta,
+								valor2);
+
 						JOptionPane.showMessageDialog(null,
-								"Deposito realizado com sucesso!");
-					} catch (ClienteNaoPossuiContaException
-							| EntradaInvalidaException | RepositorioException
+								"Deposito realizado com sucesso!", "Sucesso",
+								JOptionPane.INFORMATION_MESSAGE);
+					} catch (EntradaInvalidaException | RepositorioException
 							| ValorInvalidoException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
+					} catch (ClienteNaoPossuiContaException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});
@@ -212,25 +265,41 @@ public class ClienteMenuFrame extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 						String numero = JOptionPane.showInputDialog(null,
-								"Informe o número da conta:", "Conta",
+								"Informe o numero da conta:", "Conta",
 								JOptionPane.PLAIN_MESSAGE);
-						ContaAbstrata conta = AppletClienteMenuFrame.banco
-								.procurarEmContasDoCliente(cliente, numero);
+
+						if (numero == null)
+							return;
+
+						ContaAbstrata achouConta = null;
+						if (cliente.procurarConta(numero) != -1)
+							achouConta = AppletClienteMenuFrame.banco
+									.procurarConta(numero);
+						else
+							throw new ClienteNaoPossuiContaException();
+
 						String valor = JOptionPane.showInputDialog(null,
 								"Informe o valor a ser sacado:", "Saque",
 								JOptionPane.PLAIN_MESSAGE);
-						if (!valor.matches("[0-9]*"))
+
+						if (!valor.matches("[0-9]*") || valor.equals(""))
 							throw new EntradaInvalidaException();
 						double valor2 = Double.parseDouble(valor);
-						AppletClienteMenuFrame.banco.debitar(conta, valor2);
+
+						AppletClienteMenuFrame.banco
+								.debitar(achouConta, valor2);
+
 						JOptionPane.showMessageDialog(null,
-								"Saque realizado com sucesso!");
-					} catch (ClienteNaoPossuiContaException
-							| EntradaInvalidaException | RepositorioException
-							| ValorInvalidoException
-							| SaldoInsuficienteException e) {
+								"Saque realizado com sucesso!", "Sucesso",
+								JOptionPane.INFORMATION_MESSAGE);
+					} catch (EntradaInvalidaException | RepositorioException
+							| ValorInvalidoException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
+					} catch (ClienteNaoPossuiContaException
+							| SaldoInsuficienteException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});
@@ -246,18 +315,28 @@ public class ClienteMenuFrame extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					System.exit(0);
+					ClienteMenuFrame.this.setVisible(false);
 				}
 			});
 		}
 		return this.exitButton;
 	}
 	
-	public void setGetSaldoPane(JOptionPane getSaldoPane) {
-		if(this.getSaldoPane == null){
-			this.getSaldoPane = new JOptionPane("messagem", JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+	private JTextArea getFormularioContasClienteTextArea() {
+		if (this.formularioContasClienteTextArea == null) {
+			this.formularioContasClienteTextArea = new JTextArea("Contas:\n\n" + cliente.getContas());	
+			this.formularioContasClienteTextArea.setEditable(false);
 		}
-		this.getSaldoPane = getSaldoPane;
+		return this.formularioContasClienteTextArea;
 	}
+
+	private JScrollPane getFormularioContasClienteScrollPane() {
+		if (this.formularioContasClienteScrollPane == null) {
+			this.formularioContasClienteScrollPane = new JScrollPane(
+					getFormularioContasClienteTextArea());
+		}
+		return this.formularioContasClienteScrollPane;
+	}
+
 
 }

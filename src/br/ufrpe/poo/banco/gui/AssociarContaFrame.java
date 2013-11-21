@@ -33,7 +33,6 @@ public class AssociarContaFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static AssociarContaFrame instanceAssociarContaFrame;
 	private JPanel panelAssociarConta;
 	private JLabel cpfClienteLabel;
 	private JLabel numeroContaClienteLabel;
@@ -41,20 +40,13 @@ public class AssociarContaFrame extends JFrame {
 	private JTextField numeroContaTextField;
 	private JButton associarContaButton;
 	private JButton cancelarButton;
-	private ButtonGroup tipoCorrenteButtonGroup;
-	private JRadioButton tipoContaRadioButton;
+	private ButtonGroup tipoContaButtonGroup;
+	private JRadioButton tipoCorrenteRadioButton;
 	private JRadioButton tipoPoupancaRadioButton;
 	private JRadioButton tipoEspecialRadioButton;
 	private JRadioButton tipoImpostoRadioButton;
 	private JLabel tipoContasLabel;
 	private ContaAbstrata tipoConta = new Conta("", 0);
-
-	public static AssociarContaFrame getInstanceAssociarContaFrame() {
-		if (AssociarContaFrame.instanceAssociarContaFrame == null) {
-			AssociarContaFrame.instanceAssociarContaFrame = new AssociarContaFrame();
-		}
-		return AssociarContaFrame.instanceAssociarContaFrame;
-	}
 
 	public AssociarContaFrame() {
 		super();
@@ -99,6 +91,7 @@ public class AssociarContaFrame extends JFrame {
 			public void windowActivated(WindowEvent e) {
 			}
 		});
+		this.setVisible(true);
 	}
 
 	private JPanel getPanelAssociarConta() {
@@ -172,27 +165,29 @@ public class AssociarContaFrame extends JFrame {
 						String numeroConta = getNumeroContaTextField()
 								.getText();
 						if (numeroConta.equals(""))
-							throw new CampoVazioException("número da conta");
+							throw new CampoVazioException("numero da conta");
 
-						AdminMenuFrame.getBanco().associarConta(cpf,
-								numeroConta);
+						AdminMenuFrame.banco.associarConta(cpf, numeroConta);
 
 						tipoConta.setNumero(numeroConta);
 						tipoConta.setSaldo(0);
 
-						AdminMenuFrame.getBanco().cadastrarConta(tipoConta);
+						AdminMenuFrame.banco.inserirConta(tipoConta);
 
 						JOptionPane.showMessageDialog(null,
-								"Conta associada ao cliente com sucesso!");
+								"Conta associada ao cliente com sucesso!",
+								"Sucesso", JOptionPane.INFORMATION_MESSAGE);
+						System.out.println(tipoConta.getClass());
 						esvaziarCampos();
-					} catch (CampoVazioException
-							| ClienteNaoCadastradoException
+					} catch (ClienteNaoCadastradoException
 							| ClienteJaPossuiContaException
 							| ContaJaAssociadaException | RepositorioException
 							| ContaJaCadastradaException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
-						esvaziarCampos();
+					} catch (CampoVazioException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 
 				}
@@ -218,30 +213,30 @@ public class AssociarContaFrame extends JFrame {
 	}
 
 	private ButtonGroup getTipoContaButtonGroup() {
-		if (this.tipoCorrenteButtonGroup == null) {
-			this.tipoCorrenteButtonGroup = new ButtonGroup();
-			this.tipoCorrenteButtonGroup.add(getTipoCorrenteRadioButton());
-			this.tipoCorrenteButtonGroup.add(getTipoPoupancaRadioButton());
-			this.tipoCorrenteButtonGroup.add(getTipoEspecialRadioButton());
-			this.tipoCorrenteButtonGroup.add(getTipoImpostoRadioButton());
+		if (this.tipoContaButtonGroup == null) {
+			this.tipoContaButtonGroup = new ButtonGroup();
+			this.tipoContaButtonGroup.add(getTipoCorrenteRadioButton());
+			this.tipoContaButtonGroup.add(getTipoPoupancaRadioButton());
+			this.tipoContaButtonGroup.add(getTipoEspecialRadioButton());
+			this.tipoContaButtonGroup.add(getTipoImpostoRadioButton());
 		}
-		return this.tipoCorrenteButtonGroup;
+		return this.tipoContaButtonGroup;
 	}
 
 	private JRadioButton getTipoCorrenteRadioButton() {
-		if (this.tipoContaRadioButton == null) {
-			this.tipoContaRadioButton = new JRadioButton("Corrente", true);
-			this.tipoContaRadioButton.setBounds(50, 150, 90, 20);
-			this.tipoContaRadioButton
+		if (this.tipoCorrenteRadioButton == null) {
+			this.tipoCorrenteRadioButton = new JRadioButton("Corrente", true);
+			this.tipoCorrenteRadioButton.setBounds(50, 150, 90, 20);
+			this.tipoCorrenteRadioButton
 					.addItemListener(new ContasRadioButtonHandler(new Conta("",
 							0)));
 		}
-		return this.tipoContaRadioButton;
+		return this.tipoCorrenteRadioButton;
 	}
 
 	private JRadioButton getTipoPoupancaRadioButton() {
 		if (this.tipoPoupancaRadioButton == null) {
-			this.tipoPoupancaRadioButton = new JRadioButton("Poupança", false);
+			this.tipoPoupancaRadioButton = new JRadioButton("Poupanca", false);
 			this.tipoPoupancaRadioButton.setBounds(140, 150, 90, 20);
 			this.tipoPoupancaRadioButton
 					.addItemListener(new ContasRadioButtonHandler(new Poupanca(
@@ -256,7 +251,7 @@ public class AssociarContaFrame extends JFrame {
 			this.tipoEspecialRadioButton.setBounds(229, 150, 85, 20);
 			this.tipoEspecialRadioButton
 					.addItemListener(new ContasRadioButtonHandler(
-							new ContaEspecial("", 0, 5)));
+							new ContaEspecial("", 0)));
 		}
 		return this.tipoEspecialRadioButton;
 	}
@@ -294,7 +289,7 @@ public class AssociarContaFrame extends JFrame {
 				if (conta instanceof Poupanca)
 					tipoConta = new Poupanca("", 0);
 				else if (conta instanceof ContaEspecial)
-					tipoConta = new ContaEspecial("", 0, 5);
+					tipoConta = new ContaEspecial("", 0);
 				else
 					tipoConta = new Conta("", 0);
 			} else
@@ -305,6 +300,8 @@ public class AssociarContaFrame extends JFrame {
 	private void esvaziarCampos() {
 		getCpfClienteTextField().setText("");
 		getNumeroContaTextField().setText("");
-		this.tipoConta = null;
+		getTipoContaButtonGroup();
+		getTipoCorrenteRadioButton().setSelected(true);
+		tipoConta = new Conta("", 0);
 	}
 }

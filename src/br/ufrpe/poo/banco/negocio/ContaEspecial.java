@@ -15,9 +15,9 @@ public class ContaEspecial extends Conta {
 	 */
 	protected double bonus;
 
-	public ContaEspecial(String numero, double saldo, double bonus) {
+	public ContaEspecial(String numero, double saldo) {
 		super(numero, saldo);
-		this.bonus = bonus;
+		this.bonus = 0;
 	}
 
 	public double getBonus() {
@@ -27,7 +27,7 @@ public class ContaEspecial extends Conta {
 	@Override
 	public void creditar(double valor) {
 		super.creditar(valor);
-		bonus = bonus + (valor * 0.01);
+		this.bonus = this.bonus + (valor * 0.01);
 	}
 
 	/**
