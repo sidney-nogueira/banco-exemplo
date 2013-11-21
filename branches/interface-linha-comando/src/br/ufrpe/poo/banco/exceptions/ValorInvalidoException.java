@@ -5,7 +5,7 @@ public class ValorInvalidoException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	public ValorInvalidoException(){
-		super("O valor informado é inválido!");
+		super("O valor informado eh invalido!");
 	}
 
 }

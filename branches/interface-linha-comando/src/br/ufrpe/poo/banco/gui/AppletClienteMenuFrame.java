@@ -20,6 +20,7 @@ public class AppletClienteMenuFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JButton iniciarButton;
 	public static ICliente banco;
+	private ClienteMenuFrame clienteMenuFrame;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -66,10 +67,19 @@ public class AppletClienteMenuFrame extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					ClienteMenuFrame.getInstanceClienteMenuFrame().setVisible(true);
+					setClienteMenuFrame();
 				}
 			});
 		}
 		return this.iniciarButton;
 	}
+
+	public void setClienteMenuFrame() {
+		this.clienteMenuFrame = new ClienteMenuFrame();
+	}
+
+	public ClienteMenuFrame getClienteMenuFrame() {
+		return this.clienteMenuFrame;
+	}
+
 }

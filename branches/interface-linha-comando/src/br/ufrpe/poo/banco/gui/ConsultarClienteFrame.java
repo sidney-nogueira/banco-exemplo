@@ -22,6 +22,7 @@ import br.ufrpe.poo.banco.negocio.Cliente;
 public class ConsultarClienteFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+
 	private static ConsultarClienteFrame instanceConsultarClienteFrame;
 	private JPanel panelConsultarCliente;
 	private JTextField cpfClienteTextField;
@@ -129,7 +130,7 @@ public class ConsultarClienteFrame extends JFrame {
 						String cpf = getCpfClienteTextField().getText();
 						verificarErroCampoVazio(cpf, "cpf");
 
-						Cliente achouCliente = AdminMenuFrame.getBanco()
+						Cliente achouCliente = AdminMenuFrame.banco
 								.procurarCliente(cpf);
 
 						if (achouCliente == null)
@@ -138,11 +139,13 @@ public class ConsultarClienteFrame extends JFrame {
 						getFormularioDadosClienteTextArea().append(
 								achouCliente.toString());
 
-					} catch (CampoVazioException
-							| ClienteNaoCadastradoException e) {
+					} catch (ClienteNaoCadastradoException e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(),
 								"Erro", JOptionPane.ERROR_MESSAGE);
 						esvaziarCampos();
+					} catch (CampoVazioException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(),
+								"Alerta", JOptionPane.WARNING_MESSAGE);
 					}
 
 				}
