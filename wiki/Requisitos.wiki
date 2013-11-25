@@ -17,5 +17,3 @@
 *RFN07* - A operação debitar em uma conta imposto abate (além do valor solicitado) o valor do imposto CPMF (0.38%) proporcional ao valor debitado. 
 
 *RFN08* - É possível transferir valores entre quaisquer tipos de contas.
-
-*RNF01* - O tempo de resposta da operação de transferência não pode exceder 1 segundo.
