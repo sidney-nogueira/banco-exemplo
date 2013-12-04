@@ -17,7 +17,6 @@ public class TestePoupanca {
 	@Test
 	public final void testRenderJurosCinquentaPorcento() {
 		Poupanca p = new Poupanca("4432",1000);
-		double saldoAntes = p.getSaldo();
 		p.renderJuros(0.5);
 		assertEquals(1500, p.getSaldo(), 0);
 	}
