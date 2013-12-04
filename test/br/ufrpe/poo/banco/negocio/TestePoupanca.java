@@ -1,8 +1,7 @@
 package br.ufrpe.poo.banco.negocio;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.AfterClass;
 import org.junit.Test;
 
 public class TestePoupanca {

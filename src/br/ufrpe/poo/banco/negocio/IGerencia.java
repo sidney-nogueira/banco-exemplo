@@ -61,7 +61,7 @@ public interface IGerencia {
 	 *             contas.
 	 * @throws ContaJaCadastradaException
 	 */
-	void inserirConta(ContaAbstrata conta) throws RepositorioException,
+	void cadastrar(ContaAbstrata conta) throws RepositorioException,
 			ContaJaCadastradaException;
 
 	/**

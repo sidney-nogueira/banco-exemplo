@@ -172,7 +172,7 @@ public class AssociarContaFrame extends JFrame {
 						tipoConta.setNumero(numeroConta);
 						tipoConta.setSaldo(0);
 
-						AdminMenuFrame.banco.inserirConta(tipoConta);
+						AdminMenuFrame.banco.cadastrar(tipoConta);
 
 						JOptionPane.showMessageDialog(null,
 								"Conta associada ao cliente com sucesso!",
