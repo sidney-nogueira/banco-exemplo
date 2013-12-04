@@ -28,7 +28,7 @@ public class Cliente {
 	 * @return posicao da conta no array. Valor retornado igual a numConta caso
 	 *         conta nao exista.
 	 */
-	private int posicaoConta(ContaAbstrata conta) {
+	public int posicaoConta(ContaAbstrata conta) {
 		int i;
 		for (i = 0; i < this.numContas; i++) {
 			if (this.contas[i].equals(conta.getNumero())) {
@@ -43,7 +43,7 @@ public class Cliente {
 	 * @param conta conta a ser procurada.
 	 * @return se conta esta vinculada ao cliente.
 	 */
-	private boolean possuiConta(ContaAbstrata conta) {
+	public boolean possuiConta(ContaAbstrata conta) {
 		if (posicaoConta(conta) < this.contas.length)
 			return true;
 		else

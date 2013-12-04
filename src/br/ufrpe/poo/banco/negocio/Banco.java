@@ -10,13 +10,10 @@ import br.ufrpe.poo.banco.dados.RepositorioException;
  */
 public class Banco implements IBanco {
 	
-	public Banco (){
-		
-	}
 	/**
 	 * Repositorio de contas.
 	 */
-	private RepositorioContas contas;
+	protected RepositorioContas contas;
 
 	/**
 	 * Taxa dos juros da poupanca.
@@ -26,13 +23,13 @@ public class Banco implements IBanco {
 	/**
 	 * Instancia unica para o sistema do banco.
 	 */
-	private static IBanco instance;
+	protected static IBanco instance;
 
 	/**
 	 * Constroi um banco a partir do repositorio fornecido.
 	 * @param rep repositorio das contas.
 	 */
-	private Banco(RepositorioContas rep) {
+	protected Banco(RepositorioContas rep) {
 		this.contas = rep;
 	}
 	

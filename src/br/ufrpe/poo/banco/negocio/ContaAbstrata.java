@@ -9,7 +9,7 @@ public abstract class ContaAbstrata implements Serializable {
 	
 	public ContaAbstrata(String numero, double valor) {
 		this.numero = numero;
-		this.saldo = valor;
+		this.saldo = valor > 0 ? valor : 0;
 	}
 	
 	public String getNumero() {
@@ -21,7 +21,9 @@ public abstract class ContaAbstrata implements Serializable {
 	}
 	
 	public void creditar(double valor) {
-		this.saldo = this.saldo + valor;
+		if(valor > 0){
+			this.saldo = this.saldo + valor;			
+		}
 	}
 	
 	public abstract void debitar(double valor) throws SaldoInsuficienteException;

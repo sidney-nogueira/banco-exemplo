@@ -20,7 +20,7 @@ public class TestePoupanca {
 		Poupanca p = new Poupanca("4432",1000);
 		double saldoAntes = p.getSaldo();
 		p.renderJuros(0.5);
-		assertEquals(saldoAntes + saldoAntes/2, p.getSaldo(), 0);
+		assertEquals(1500, p.getSaldo(), 0);
 	}
 
 

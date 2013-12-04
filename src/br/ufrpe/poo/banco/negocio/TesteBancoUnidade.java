@@ -9,6 +9,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.*;
 
 import br.ufrpe.poo.banco.dados.RepositorioContas;
+import br.ufrpe.poo.banco.dados.RepositorioContasArquivoTxt;
 import br.ufrpe.poo.banco.dados.RepositorioException;
 
 /**
@@ -25,38 +26,47 @@ public class TesteBancoUnidade extends Banco {
 	public TesteBancoUnidade() {
 		super(null);
 	}
-
+	
 	@Test
 	public void testCadastraContaNaoExistente()
 			throws InicializacaoSistemaException, RepositorioException {
+		
 		TesteBancoUnidade banco = new TesteBancoUnidade();
+		ContaAbstrata c = new Conta("1", 0);
+		//
 		banco.contas = mock(RepositorioContas.class);
 		when(banco.contas.existe("1")).thenReturn(false);
+		when(banco.contas.procurar("1")).thenReturn(c);
+		//
 		try {
-			ContaAbstrata c = new Conta("1", 0);
 			banco.cadastrar(c);
+			assertEquals(0, banco.getSaldo("1"), 0);
 		} catch (RepositorioException e) {
 			fail();
 		} catch (ContaJaCadastradaException e) {
+			fail();
+		} catch (ContaNaoEncontradaException e) {
 			fail();
 		}
 	}
 
-	@Test
+	@Test(expected = ContaJaCadastradaException.class)
 	public void testCadastraContaExistente()
-			throws InicializacaoSistemaException, RepositorioException {
+			throws InicializacaoSistemaException, RepositorioException, 
+			ContaJaCadastradaException {
+		
 		TesteBancoUnidade banco = new TesteBancoUnidade();
+		//
 		banco.contas = mock(RepositorioContas.class);
 		when(banco.contas.existe("1")).thenReturn(true);
+		//
 		try {
 			ContaAbstrata c = new Conta("1", 0);
 			banco.cadastrar(c);
-			fail();
+			fail("ContaJaCadastradaException nao foi lancada");
 		} catch (RepositorioException e) {
 			fail();
-		} catch (ContaJaCadastradaException e) {
-			assertTrue(true);
-		}
+		} 
 	}
 
 }
