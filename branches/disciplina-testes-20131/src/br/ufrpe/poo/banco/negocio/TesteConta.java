@@ -11,6 +11,7 @@ import org.junit.Test;
 
 public class TesteConta {
 	
+	
 	/**
 	 * Testa se os parametros do construtor sao passados corretamente
 	 */
@@ -24,7 +25,7 @@ public class TesteConta {
 	/**
 	 * Testa que nao e permitido criar uma conta com saldo negativo
 	 */
-	@Test
+	@Test 
 	public void testeConstrutorSaldoNegativo() {
 		Conta c = new Conta("1",-786);
 		assertEquals(0,  c.getSaldo(), 0);
@@ -60,10 +61,13 @@ public class TesteConta {
 	@Test 
 	public void testeDebitarForaLimiteSaldoInalterado() {
 		Conta c = new Conta("2132",42342);
+		boolean excecao = false;
 		try {
 			c.debitar(32432423);
 		} catch (SaldoInsuficienteException e) {
+			excecao = true;
 		}
+		if(!excecao) fail("Nao levantou SaldoInsuficienteException");
 		assertEquals("Saldo nao deveria ter mudado", 42342, c.getSaldo(), 0);
 	}
 
@@ -72,10 +76,21 @@ public class TesteConta {
 	 * Testa que o metodo creditar de conta nao permite creditar valor negativo
 	 */
 	@Test
-	public void testeCreditar() {
+	public void testeCreditarNaoMudaSaldo() {
 		Conta c = new Conta("6564",2000);
 		c.creditar(-1000);
 		assertEquals("Credita nao deveria alterar o saldo", 2000, c.getSaldo(), 0);
+	}
+	
+	/**
+	 * Testa que um valor positivo e corretamento adicionado ao saldo da conta
+	 */
+	@Test
+	public void testeCreditarOk(){
+		//fail("Lembrar de implementar");	
+		Conta c = new Conta("6564",2000);
+		c.creditar(1000);
+		assertEquals(3000, c.getSaldo(), 0);
 	}
 	
 	/**
@@ -89,18 +104,22 @@ public class TesteConta {
 	}
 	
 	/**
+	 * Testa o metodo equals enviando objeto diferente de conta
+	 */
+	@Test
+	public void testeEqualsOutroObjeto(){
+		Conta c1 = new Conta("456", 50);
+		Conta c2 = new Conta("456", 3423);
+		assertEquals(c1,c2);
+	}
+	
+	/**
 	 * Testa o metodo equal de conta quando duas contas tem o mesmo saldo e numeros diferentes
 	 */
 	@Test
 	public void testeEqualsNok(){
 		Conta c1 = new Conta("456", 50);
-		Conta c2 = new Conta("457", 50);
-		assertTrue("Objetos nao sao iguais",!c1.equals(c2));
-	}
-	
-	
-
-	
-	
-
+		Cliente cl1 = new Cliente("123");
+		assertTrue("Objetos nao sao iguais",!c1.equals(cl1));
+	}	
 }

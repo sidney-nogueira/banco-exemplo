@@ -23,7 +23,7 @@ public class TesteContaEspecial {
 	@Test 
 	public void testeConstrutorBonusNegativo() {
 		ContaEspecial c = new ContaEspecial("1",1000,-70);
-		assertEquals(0,  c.getBonus(), 0);
+		assertEquals(0,c.getBonus(), 0);
 	}
 	
 	/**
