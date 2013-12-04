@@ -29,19 +29,19 @@ public class Banco implements IGerencia, ICliente {
 	/**
 	 * Instancia do repositorio de clientes.
 	 */
-	private IRepositorioClientes clientes;
+	protected IRepositorioClientes clientes;
 
 	/**
 	 * Instacia do repositorio de contas
 	 */
-	private IRepositorioContas contas;
+	protected IRepositorioContas contas;
 
 	/**
 	 * Instancia do comunicador.
 	 */
-	private static Banco instance;
+	protected static Banco instance;
 
-	public Banco(IRepositorioClientes repositorioClientesArquivoBin,
+	protected Banco(IRepositorioClientes repositorioClientesArquivoBin,
 			IRepositorioContas repositorioContasArquivoBin) {
 		this.clientes = repositorioClientesArquivoBin;
 		this.contas = repositorioContasArquivoBin;
@@ -84,7 +84,7 @@ public class Banco implements IGerencia, ICliente {
 	}
 
 	@Override
-	public void inserirConta(ContaAbstrata conta) throws RepositorioException,
+	public void cadastrar(ContaAbstrata conta) throws RepositorioException,
 			ContaJaCadastradaException {
 		if (!this.contas.inserir(conta))
 			throw new ContaJaCadastradaException();

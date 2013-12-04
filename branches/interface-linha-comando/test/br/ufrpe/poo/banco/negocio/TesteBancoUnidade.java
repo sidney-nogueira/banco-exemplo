@@ -2,14 +2,13 @@ package br.ufrpe.poo.banco.negocio;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
 import br.ufrpe.poo.banco.dados.IRepositorioContas;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
-import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
 

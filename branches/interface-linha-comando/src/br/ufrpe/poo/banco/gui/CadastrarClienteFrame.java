@@ -207,7 +207,7 @@ public class CadastrarClienteFrame extends JFrame {
 						Cliente cliente = new Cliente(nome, cpf);
 
 						cliente.adicionarConta(numeroConta);
-						AdminMenuFrame.banco.inserirConta(tipoConta);
+						AdminMenuFrame.banco.cadastrar(tipoConta);
 						AdminMenuFrame.banco.cadastrarCliente(cliente);
 
 						JOptionPane.showMessageDialog(null,
