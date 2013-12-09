@@ -22,12 +22,19 @@ import br.ufrpe.poo.banco.exceptions.ValorInvalidoException;
 
 public class TesteBanco {
 
+	private static Banco banco;
+
 	@Before
-	public void apagarArquivoContas() throws IOException {
+	public void apagarArquivoContas() throws IOException, RepositorioException,
+			InicializacaoSistemaException {
+		
 		BufferedWriter bw = new BufferedWriter(new FileWriter("clientes.dat"));
 		bw.close();
 		bw = new BufferedWriter(new FileWriter("contas.dat"));
 		bw.close();
+		
+		Banco.instance = null;
+		TesteBanco.banco = Banco.getInstance();
 	}
 
 	/**
@@ -39,7 +46,6 @@ public class TesteBanco {
 			ContaJaCadastradaException, ContaNaoEncontradaException,
 			InicializacaoSistemaException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		ContaAbstrata conta1 = new Conta("1", 100);
 		banco.cadastrar(conta1);
 		ContaAbstrata conta2 = banco.procurarConta("1");
@@ -57,7 +63,6 @@ public class TesteBanco {
 
 		Conta c1 = new Conta("1", 200);
 		Conta c2 = new Conta("1", 300);
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		banco.cadastrar(c1);
 		banco.cadastrar(c2);
 		fail("Excecao ContaJaCadastradaException nao levantada");
@@ -73,7 +78,6 @@ public class TesteBanco {
 			ContaNaoEncontradaException, InicializacaoSistemaException,
 			ContaJaCadastradaException, ValorInvalidoException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		ContaAbstrata conta = new Conta("1", 100);
 		banco.cadastrar(conta);
 		banco.creditar(conta, 100);
@@ -91,9 +95,8 @@ public class TesteBanco {
 			ContaNaoEncontradaException, InicializacaoSistemaException,
 			ValorInvalidoException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		banco.creditar(new Conta("", 0), 200);
-		
+
 		fail("Excecao ContaNaoEncontradaException nao levantada");
 	}
 
@@ -108,7 +111,6 @@ public class TesteBanco {
 			InicializacaoSistemaException, ContaJaCadastradaException,
 			ValorInvalidoException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		ContaAbstrata conta = new Conta("1", 50);
 		banco.cadastrar(conta);
 		banco.debitar(conta, 50);
@@ -126,7 +128,6 @@ public class TesteBanco {
 			ContaNaoEncontradaException, SaldoInsuficienteException,
 			InicializacaoSistemaException, ValorInvalidoException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		banco.debitar(new Conta("", 0), 50);
 		fail("Excecao ContaNaoEncontradaException nao levantada");
 	}
@@ -142,7 +143,6 @@ public class TesteBanco {
 			InicializacaoSistemaException, ContaJaCadastradaException,
 			ValorInvalidoException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		ContaAbstrata conta1 = new Conta("1", 100);
 		ContaAbstrata conta2 = new Conta("2", 200);
 		banco.cadastrar(conta1);
@@ -164,8 +164,7 @@ public class TesteBanco {
 			ContaNaoEncontradaException, SaldoInsuficienteException,
 			InicializacaoSistemaException, ValorInvalidoException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
-		banco.transferir(new Conta("",0), new Conta("",0), 50);
+		banco.transferir(new Conta("", 0), new Conta("", 0), 50);
 		fail("Excecao ContaNaoEncontradaException nao levantada)");
 	}
 
@@ -179,7 +178,6 @@ public class TesteBanco {
 			ContaNaoEncontradaException, RenderJurosPoupancaException,
 			InicializacaoSistemaException, ContaJaCadastradaException {
 
-		Banco banco = BancoGetInstanceRetornaNovaReferencia.getInstance();
 		Poupanca poupanca = new Poupanca("20", 100);
 		banco.cadastrar(poupanca);
 		double saldoSemJuros = poupanca.getSaldo();
@@ -223,11 +221,11 @@ public class TesteBanco {
 	 */
 	@Ignore
 	@Test
-	public void testeRenderBonusContaEspecialExistente() throws RepositorioException,
-			ContaNaoEncontradaException, RenderBonusContaEspecialException,
-			InicializacaoSistemaException, RenderJurosPoupancaException,
-			ContaJaCadastradaException {
-		
+	public void testeRenderBonusContaEspecialExistente()
+			throws RepositorioException, ContaNaoEncontradaException,
+			RenderBonusContaEspecialException, InicializacaoSistemaException,
+			RenderJurosPoupancaException, ContaJaCadastradaException {
+
 		fail("Nao implementado");
 	}
 
@@ -237,9 +235,10 @@ public class TesteBanco {
 	 */
 	@Ignore
 	@Test(expected = ContaNaoEncontradaException.class)
-	public void testeRenderBonusContaEspecialNaoInexistente() throws RepositorioException,
-			ContaNaoEncontradaException, RenderBonusContaEspecialException,
-			InicializacaoSistemaException, RenderJurosPoupancaException {
+	public void testeRenderBonusContaEspecialNaoInexistente()
+			throws RepositorioException, ContaNaoEncontradaException,
+			RenderBonusContaEspecialException, InicializacaoSistemaException,
+			RenderJurosPoupancaException {
 
 		fail("Nao implementado");
 	}
