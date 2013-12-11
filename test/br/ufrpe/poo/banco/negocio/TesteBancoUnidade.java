@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.ufrpe.poo.banco.dados.IRepositorioClientes;
 import br.ufrpe.poo.banco.dados.IRepositorioContas;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
