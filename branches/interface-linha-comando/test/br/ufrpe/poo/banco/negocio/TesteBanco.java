@@ -25,7 +25,7 @@ public class TesteBanco {
 	private static Banco banco;
 
 	@Before
-	public void apagarArquivoContas() throws IOException, RepositorioException,
+	public void apagarArquivos() throws IOException, RepositorioException,
 			InicializacaoSistemaException {
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter("clientes.dat"));
@@ -49,7 +49,8 @@ public class TesteBanco {
 		ContaAbstrata conta1 = new Conta("1", 100);
 		banco.cadastrar(conta1);
 		ContaAbstrata conta2 = banco.procurarConta("1");
-		assertEquals(conta1, conta2);
+		assertEquals(conta1.getNumero(), conta2.getNumero());
+		assertEquals(conta1.getSaldo(), conta2.getSaldo(), 0);
 	}
 
 	/**

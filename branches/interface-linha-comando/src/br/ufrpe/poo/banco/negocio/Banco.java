@@ -41,10 +41,9 @@ public class Banco implements IGerencia, ICliente {
 	 */
 	protected static Banco instance;
 
-	protected Banco(IRepositorioClientes repositorioClientesArquivoBin,
-			IRepositorioContas repositorioContasArquivoBin) {
-		this.clientes = repositorioClientesArquivoBin;
-		this.contas = repositorioContasArquivoBin;
+	protected Banco(IRepositorioClientes clientes, IRepositorioContas contas) {
+		this.clientes = clientes;
+		this.contas = contas;
 	}
 
 	/**

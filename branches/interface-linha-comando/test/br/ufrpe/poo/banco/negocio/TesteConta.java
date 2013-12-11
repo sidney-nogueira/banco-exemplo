@@ -1,6 +1,8 @@
 package br.ufrpe.poo.banco.negocio;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -104,6 +106,7 @@ public class TesteConta {
 	 * Testa o metodo equals de conta quando duas contas tem o mesmo numero e
 	 * saldos diferentes
 	 */
+	
 	@Test
 	public void testeEquals() {
 		
@@ -111,6 +114,16 @@ public class TesteConta {
 		Conta c2 = new Conta("456", 3423);
 		assertEquals(c1, c2);
 	}
+	
+	@Test
+	public void testeEquals2() {
+		
+		Conta c1 = new Conta("456", 50);
+		String s1 = "456";
+		assertFalse(c1.equals(s1));
+		
+	}
+
 
 
 }
