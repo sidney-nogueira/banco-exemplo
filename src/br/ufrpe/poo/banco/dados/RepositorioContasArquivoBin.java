@@ -9,12 +9,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.iterator.IteratorContaAbstrata;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 
 /**
  * Implementacao de repositorio de contas que persiste os objetos das contas em
  * arquivo.
+ * 
  */
 public class RepositorioContasArquivoBin implements IRepositorioContas {
 
@@ -23,7 +25,7 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 
 	/** Caminho para arquivo que guarda as informacoes das contas. */
 	private final String ARQUIVO = "contas.dat";
-	
+
 	/** Arquivo que armazena as contas. */
 	private File arquivoContas;
 
@@ -31,6 +33,7 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	 * Constroi um repositorio a partir de contas armazenadas em arquivo.
 	 * 
 	 * @throws RepositorioException
+	 *             Lancada quando ocorre erro no repositorio.
 	 */
 	public RepositorioContasArquivoBin() throws RepositorioException {
 		try {
@@ -114,22 +117,22 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	@Override
 	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.inserir(conta);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
 
 	@Override
-	public ContaAbstrata procurar(String numero) throws RepositorioException {
+	public ContaAbstrata procurar(String numero) {
 		return contas.procurar(numero);
 	}
 
 	@Override
 	public boolean remover(String numero) throws RepositorioException {
 		boolean sucesso = contas.remover(numero);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
@@ -137,18 +140,18 @@ public class RepositorioContasArquivoBin implements IRepositorioContas {
 	@Override
 	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.atualizar(conta);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
 
 	@Override
-	public boolean existe(String numero) throws RepositorioException {
+	public boolean existe(String numero) {
 		return contas.existe(numero);
 	}
 
-	public IteratorContaAbstrata getIterator() throws RepositorioException {
+	public IteratorContaAbstrata getIterator() {
 		return contas.getIterator();
 	}
 }

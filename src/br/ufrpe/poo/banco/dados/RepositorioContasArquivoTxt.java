@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.iterator.IteratorContaAbstrata;
 import br.ufrpe.poo.banco.negocio.Conta;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
@@ -83,12 +84,10 @@ public class RepositorioContasArquivoTxt implements IRepositorioContas {
 					conta = new ContaImposto(numero, saldo);
 					break;
 				case 3:
-					double bonus = Double.parseDouble(s.next());
-					conta = new ContaEspecial(numero, saldo, bonus);
+					conta = new ContaEspecial(numero, saldo);
 					break;
 				default:
-					throw new RepositorioException(
-							"Tipo de conta inexistente!");
+					throw new RepositorioException("Tipo de conta inexistente!");
 				}
 				this.contas.inserir(conta);
 			}
@@ -178,22 +177,22 @@ public class RepositorioContasArquivoTxt implements IRepositorioContas {
 	@Override
 	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.inserir(conta);
-		if(sucesso){
-			this.concatenarEmArquivo(conta);			
+		if (sucesso) {
+			this.concatenarEmArquivo(conta);
 		}
 		return sucesso;
 	}
 
 	@Override
-	public ContaAbstrata procurar(String numero) throws RepositorioException {
+	public ContaAbstrata procurar(String numero) {
 		return contas.procurar(numero);
 	}
 
 	@Override
 	public boolean remover(String numero) throws RepositorioException {
 		boolean sucesso = contas.remover(numero);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
@@ -201,14 +200,14 @@ public class RepositorioContasArquivoTxt implements IRepositorioContas {
 	@Override
 	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
 		boolean sucesso = contas.atualizar(conta);
-		if(sucesso){
-			this.gravarArquivo();			
+		if (sucesso) {
+			this.gravarArquivo();
 		}
 		return sucesso;
 	}
 
 	@Override
-	public boolean existe(String numero) throws RepositorioException {
+	public boolean existe(String numero) {
 		return contas.existe(numero);
 	}
 

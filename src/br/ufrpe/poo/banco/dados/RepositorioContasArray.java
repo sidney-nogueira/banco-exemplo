@@ -1,5 +1,6 @@
 package br.ufrpe.poo.banco.dados;
 
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.iterator.IteratorContaAbstrata;
 import br.ufrpe.poo.banco.iterator.IteratorContaAbstrataArray;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
@@ -27,24 +28,6 @@ public class RepositorioContasArray implements IRepositorioContas {
 		indice = 0;
 	}
 
-	@Override
-	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
-		if (this.existe(conta.getNumero())) {
-			return false;
-		}
-		// se array chegou na capacidade
-		if (contas.length == indice) {
-			ContaAbstrata[] aux = new ContaAbstrata[contas.length * 2];
-			for (int i = 0; i < indice; i++) {
-				aux[i] = contas[i];
-			}
-			this.contas = aux;
-		}
-		contas[indice] = conta;
-		indice = indice + 1;
-		return true;
-	}
-
 	/**
 	 * Retorna o indice da conta no array.
 	 * 
@@ -69,42 +52,56 @@ public class RepositorioContasArray implements IRepositorioContas {
 	}
 
 	@Override
-	public ContaAbstrata procurar(String numero) throws RepositorioException {
-		ContaAbstrata resposta = null;
+	public boolean inserir(ContaAbstrata conta) throws RepositorioException {
+		if (this.existe(conta.getNumero())) {
+			return false;
+		}
+		if (contas.length == indice) {
+			ContaAbstrata[] aux = new ContaAbstrata[contas.length * 2];
+			for (int i = 0; i < indice; i++) {
+				aux[i] = contas[i];
+			}
+			this.contas = aux;
+		}
+		contas[indice] = conta;
+		indice = indice + 1;
+		return true;
+	}
+
+	@Override
+	public ContaAbstrata procurar(String numero) {
+		ContaAbstrata conta = null;
 		int i = this.getIndice(numero);
 		if (i < this.indice) {
-			resposta = this.contas[i];
+			conta = this.contas[i];
 		}
-		return resposta;
+		return conta;
 	}
 
 	@Override
 	public boolean remover(String numero) throws RepositorioException {
-		boolean sucesso = false;
 		int i = this.getIndice(numero);
-		if (i < this.indice) {//valida indice
-			// decrementa proximo indice livre
-			this.indice = this.indice - 1; 
-			// copia ultimo para removido
+		if (i < this.indice) {
+			this.indice = this.indice - 1;
 			this.contas[i] = this.contas[this.indice];
-			// ultimo aponta para null
 			this.contas[this.indice] = null;
+			return true;
 		}
-		return sucesso;
+		return false;
 	}
 
 	@Override
 	public boolean atualizar(ContaAbstrata conta) throws RepositorioException {
-		boolean sucesso = false;
 		int i = this.getIndice(conta.getNumero());
 		if (i < this.indice) {
 			this.contas[i] = conta;
+			return true;
 		}
-		return sucesso;
+		return false;
 	}
 
 	@Override
-	public boolean existe(String numero) throws RepositorioException {
+	public boolean existe(String numero) {
 		int i = this.getIndice(numero);
 		return (i != this.indice);
 	}

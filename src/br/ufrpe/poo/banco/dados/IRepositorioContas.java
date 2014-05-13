@@ -1,5 +1,6 @@
 package br.ufrpe.poo.banco.dados;
 
+import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.iterator.IteratorContaAbstrata;
 import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 
@@ -10,7 +11,7 @@ import br.ufrpe.poo.banco.negocio.ContaAbstrata;
 public interface IRepositorioContas {
 
 	/**
-	 * Insere uma conta no reposit—rio.
+	 * Insere uma conta no repositorio.
 	 * 
 	 * @param conta
 	 *            conta a ser inserida.
@@ -26,12 +27,12 @@ public interface IRepositorioContas {
 	 * 
 	 * @param numero
 	 *            numero da conta a ser retornada.
-	 * @return conta encontrada. Retornada <code>null</code> se a conta nao foi
+	 * @return conta encontrada. Retorna <code>null</code> se a conta nao foi
 	 *         encontrada.
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
 	 */
-	ContaAbstrata procurar(String numero) throws RepositorioException;
+	ContaAbstrata procurar(String numero);
 
 	/**
 	 * Remove uma conta do repositorio.
@@ -50,7 +51,7 @@ public interface IRepositorioContas {
 	 * 
 	 * @param conta
 	 *            conta a ser atualizada.
-	 * @return se conta foi removida. Se conta nao existe e retornado
+	 * @return se conta foi atualizada. Se conta nao existe e retornado
 	 *         <code>false<code/>.
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
@@ -66,7 +67,7 @@ public interface IRepositorioContas {
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
 	 */
-	boolean existe(String numero) throws RepositorioException;
+	boolean existe(String numero);
 
 	/**
 	 * Retorna um iterador para acessar sequencialmente as contas do
@@ -76,5 +77,5 @@ public interface IRepositorioContas {
 	 * @throws RepositorioException
 	 *             levantada quando ocorre erro no repositorio.
 	 */
-	IteratorContaAbstrata getIterator() throws RepositorioException;
+	IteratorContaAbstrata getIterator();
 }
