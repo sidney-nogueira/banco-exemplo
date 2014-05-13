@@ -13,6 +13,8 @@ import br.ufrpe.poo.banco.exceptions.ContaJaAssociadaException;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
+import br.ufrpe.poo.banco.exceptions.RenderBonusContaEspecialException;
+import br.ufrpe.poo.banco.exceptions.RenderJurosPoupancaException;
 import br.ufrpe.poo.banco.exceptions.RepositorioException;
 import br.ufrpe.poo.banco.exceptions.SaldoInsuficienteException;
 import br.ufrpe.poo.banco.exceptions.ValorInvalidoException;
@@ -170,6 +172,37 @@ public class Banco implements IGerencia, ICliente {
 			AtualizacaoNaoRealizadaException {
 		if (!this.clientes.atualizar(cliente))
 			throw new AtualizacaoNaoRealizadaException();
+	}
+
+	public void renderBonus(ContaAbstrata conta)
+			throws RenderBonusContaEspecialException, RepositorioException,
+			ContaNaoEncontradaException {
+		if (conta instanceof ContaEspecial) {
+			if (this.contas.existe(conta.getNumero())) {
+				((ContaEspecial) conta).renderBonus();
+				this.contas.atualizar(conta);
+			}else{
+				throw new ContaNaoEncontradaException();
+			}
+		} else {
+			throw new RenderBonusContaEspecialException();
+		}
+
+	}
+
+	public void renderJuros(ContaAbstrata conta)
+			throws RenderJurosPoupancaException, ContaNaoEncontradaException,
+			RepositorioException {
+		if(conta instanceof Poupanca){
+			if(this.contas.existe(conta.getNumero())){
+				((Poupanca) conta).renderJuros(0.5);
+				this.contas.atualizar(conta);
+			}else{
+				throw new ContaNaoEncontradaException();
+			}
+		}else{
+			throw new RenderJurosPoupancaException();
+		}
 	}
 
 }

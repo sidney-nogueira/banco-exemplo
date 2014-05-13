@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import br.ufrpe.poo.banco.dados.RepositorioContasArquivoBin;
 import br.ufrpe.poo.banco.exceptions.ContaJaCadastradaException;
 import br.ufrpe.poo.banco.exceptions.ContaNaoEncontradaException;
 import br.ufrpe.poo.banco.exceptions.InicializacaoSistemaException;
@@ -46,6 +47,7 @@ public class TesteBanco {
 			ContaJaCadastradaException, ContaNaoEncontradaException,
 			InicializacaoSistemaException {
 
+		Banco banco = new Banco(null, new RepositorioContasArquivoBin());
 		ContaAbstrata conta1 = new Conta("1", 100);
 		banco.cadastrar(conta1);
 		ContaAbstrata conta2 = banco.procurarConta("1");

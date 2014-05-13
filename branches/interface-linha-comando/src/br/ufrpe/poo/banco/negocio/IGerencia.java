@@ -16,7 +16,7 @@ import br.ufrpe.poo.banco.exceptions.RepositorioException;
  * @author
  * 
  */
-public interface IGerencia {
+public interface IGerencia extends ICliente {
 
 	/**
 	 * Procurar por um cliente no repositorio a partir de seu cpf.
