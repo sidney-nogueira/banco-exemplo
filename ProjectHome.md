@@ -1,0 +1,1 @@
+Código base foi baixado do site da disciplina de introdução a programação em (http://www.cin.ufpe.br/~if669/index.php/Main_Page) e adaptado.
